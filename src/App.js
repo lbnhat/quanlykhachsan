@@ -7,7 +7,7 @@ import Bookingscreen from "./screens/Bookingscreen";
 import DangKy from "./screens/DangKy";
 import DangNhap from "./screens/DangNhap";
 import Profilescreen from "./screens/Profilescreen";
-import Adminscreen from "./screens/Adminscreen";
+import Adminscreen from "./admin/Admin";
 import LandingScreen from "./screens/LandingScreen";
 
 function App() {
