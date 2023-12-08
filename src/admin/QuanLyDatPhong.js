@@ -33,7 +33,7 @@ export default function QuanLyDatPhong() {
   };
 
   const handleNumberOfRoomsChange = (value) => {
-    // console.log("Number of Rooms:", value);
+     console.log("Number of Rooms:", value);
     setNumberOfRooms(value);
   };
 

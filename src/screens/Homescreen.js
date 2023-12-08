@@ -2,24 +2,32 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import axios from "axios";
 import Room from "../components/Room2";
 import Loader from "react-spinners/RingLoader";
-import Error from "../components/Error";
 import "antd/dist/antd.css";
-import { DatePicker, Space } from "antd";
-import moment, { months } from "moment";
+import {
+  Row,
+  Col,
+  DatePicker,
+  InputNumber,
+  Button,
+  Form,
+  Input,
+  Card,
+  Modal,
+} from "antd";
+import "antd/dist/antd.css";
 const { RangePicker } = DatePicker;
 
 function Homescreen() {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
+  const [duplicaterooms, setduplicaterooms] = useState();
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [numberOfRooms, setNumberOfRooms] = useState(1);
   const [fromdate, setfromdate] = useState();
   const [todate, settodate] = useState();
-  const [duplicaterooms, setduplicaterooms] = useState();
-  const [searchKey, setSearchKey] = useState("");
-  const [type, setType] = useState("all");
-
+  const [isModalVisible, setIsModalVisible] = useState(true);
   useEffect(async () => {
-    console.log("vaoooo =========================")
     try {
       setLoading(true);
       // const data = (
@@ -108,109 +116,106 @@ function Homescreen() {
       setLoading(false);
     }
   }, []);
+  const onFinish = (values) => {
+    // Gửi dữ liệu đặt phòng đến server hoặc xử lý theo nhu cầu của bạn
+    console.log("Received values:", values);
+    setIsModalVisible(true);
+  };
 
-  function filter_hang_phong(e) {
-    setType(e);
-    if (e !== "all") {
-      const temprooms = duplicaterooms.filter(
-        (phong) => phong.hang_phong.toLowerCase() === e.toLowerCase()
-        
-      );
-      let a = "Bình thường"
-      console.log(a.toLowerCase())
-      setRooms(temprooms);
+  const handleDateChange = (dates, dateStrings) => {
+    console.log("Selected Dates:", dates);
+    console.log("Date Strings:", dateStrings);
+    setSelectedDate(dates);
+  };
+
+  const handleNumberOfRoomsChange = (value) => {
+    console.log("Number of Rooms:", value);
+    setNumberOfRooms(value);
+  };
+
+  const handleBookRoom = () => {
+    if (selectedDate && numberOfRooms > 0) {
+      // Gửi thông tin đặt phòng đi hoặc xử lý theo logic của bạn
+      // message.success("Đặt phòng thành công!");
     } else {
-      setRooms(duplicaterooms);
+      // message.error("Vui lòng chọn ngày và số lượng phòng.");
     }
-  }
+  };
 
-  function filterbysearch() {
-    const temprooms = duplicaterooms.filter((room) =>
-      room.so_phong.toLowerCase().includes(searchKey.toLocaleLowerCase())
-    );
-
-    setRooms(temprooms);
-  }
-
-  function filterbydate(dates) {
-    setfromdate(moment(dates[0]).format("DD-MM-YYYY"));
-    settodate(moment(dates[1]).format("DD-MM-YYYY"));
-
-    var temprooms = [];
-    var availability = false;
-    for (const room of duplicaterooms) {
-      if (room.currentbookings.length > 0) {
-        for (const booking of room.currentbookings) {
-          if (
-            !moment(moment(dates[0]).format("DD-MM-YYYY")).isBetween(
-              booking.fromdate,
-              booking.todate
-            ) &&
-            !moment(moment(dates[1]).format("DD-MM-YYYY")).isBetween(
-              booking.fromdate,
-              booking.todate
-            )
-          ) {
-            if (
-              moment(dates[0]).format("DD-MM-YYYY") !== booking.fromdate &&
-              moment(dates[0]).format("DD-MM-YYYY") !== booking.todate &&
-              moment(dates[1]).format("DD-MM-YYYY") !== booking.fromdate &&
-              moment(dates[1]).format("DD-MM-YYYY") !== booking.todate
-            ) {
-              availability = true;
-            }
-          }
-        }
-      }
-
-      if (availability === true || room.currentbookings.length ===0) {
-        temprooms.push(room);
-      }
-
-      setRooms(temprooms);
-    }
-  }
 
   return (
     <div className="container">
-      <div className="sticky z-50 top-2 bg-white row mt-5 bs w-4/5 border-black border-2 mx-auto">
-        <div className="col-md-3 mx-auto">
-          <RangePicker
-            placeholder={["Ngày đặt phòng", "Ngày trả phòng"]}
-            format="DD-MM-YY"
-            onChange={filterbydate}
-          />
-        </div>
+      <Card
+        title="Tìm phòng khách sạn"
+        style={{ width: "100%", margin: "auto" }}
+      >
+        <Form
+          onFinish={onFinish}
+          name="validateOnly"
+          layout="vertical"
+          autoComplete="off"
+        >
+          <Row gutter={[16, 16]}>
+            <Col span={5} />
+            <Col span={3}>
+              <Form.Item
+                label="Ngày nhận phòng"
+                name="checkInDate"
+                rules={[
+                  { required: true, message: "Vui lòng chọn ngày nhận phòng!" },
+                ]}
+              >
+                <DatePicker placeholder="Chọn ngày" />
+              </Form.Item>
+            </Col>
 
-        <div className="col-md-5 border-2 text-center border-black ">
-          <input
-            className="text-center  w-full outline-0"
-            onChange={(e) => {
-              setSearchKey(e.target.value);
-            }}
-            onKeyUp={filterbysearch}
-            value={searchKey}
-            type="text"
-            placeholder="Tìm kiếm"
-          />
-        </div>
-        
+            <Col span={3}>
+              <Form.Item
+                label="Ngày trả phòng"
+                name="checkOutDate"
+                rules={[
+                  { required: true, message: "Vui lòng chọn ngày trả phòng!" },
+                ]}
+              >
+                <DatePicker placeholder="Chọn ngày" />
+              </Form.Item>
+            </Col>
 
-        <div className="col-md-3 text-center border-2 mx-auto border-black">
-          <select
-            className="outline-0"
-            value={type}
-            onChange={(e) => {
-              filter_hang_phong(e.target.value);
-            }}
-          >
-            <option value="all"> Tất cả </option>
-            <option value="vip"> VIP </option>
-            <option value="bình thường">Bình thường</option>
-          </select>
-        </div>
-      </div>
+            <Col span={2}>
+              <Form.Item
+                label="Người lớn"
+                name="adults"
+                rules={[
+                  { required: true, message: "Vui lòng nhập số người lớn!" },
+                ]}
+              >
+                <InputNumber min={1} />
+              </Form.Item>
+            </Col>
 
+            <Col span={2}>
+              <Form.Item
+                label="Trẻ em"
+                name="children"
+                rules={[
+                  { required: true, message: "Vui lòng nhập số trẻ em!" },
+                ]}
+              >
+                <InputNumber min={0} />
+              </Form.Item>
+            </Col>
+
+            <Col span={2}>
+              <Form.Item label="   ">
+                <Button type="primary" htmlType="submit">
+                  Tìm phòng
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Col span={7} />
+        </Form>
+      </Card>
       <div className={"relative row justify-content-center mt-5"}>
         {loading ? (
           <h1 className="text-center my-60">
@@ -225,9 +230,12 @@ function Homescreen() {
           // );
           // })
         )}
+       
       </div>
     </div>
   );
 }
 
 export default Homescreen;
+
+
