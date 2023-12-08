@@ -4,7 +4,6 @@ import { Tabs, Space, Table, Button, Modal, Card, Col, Row } from "antd";
 import Loader from "../components/Error";
 import Error from "../components/Error";
 import { getRooms } from "../services/api";
-import { Line } from "@ant-design/charts";
 import QuanLyNhanVien from "./QuanLyNhanVien";
 import KhachHang from "./KhachHang";
 import QuanLyPhong from "./QuanLyPhong";

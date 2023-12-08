@@ -163,7 +163,7 @@ function Homescreen() {
         }
       }
 
-      if (availability == true || room.currentbookings.length == 0) {
+      if (availability === true || room.currentbookings.length ===0) {
         temprooms.push(room);
       }
 

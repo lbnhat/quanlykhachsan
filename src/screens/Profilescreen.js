@@ -116,7 +116,7 @@ export function MyBookings() {
                   </h1>
                   <h1>
                     <span className="font-bold">Status : </span>
-                    {booking.status == "booked" ? (
+                    {booking.status === "booked" ? (
                       <Tag color="green">Confirmed</Tag>
                     ) : (
                       <Tag color="orange">Cancelled</Tag>
@@ -127,7 +127,7 @@ export function MyBookings() {
                     <button
                       onClick={() => cancelBooking(booking._id, booking.roomid)}
                     >
-                      {booking.status == "cancelled" ? (
+                      {booking.status === "cancelled" ? (
                         <Button type="primary" >
                           
                         </Button>
