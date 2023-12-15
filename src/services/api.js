@@ -28,7 +28,7 @@ export const getRooms = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong: "1.000.000vnd",
     },
     {
       so_phong: "A102",
@@ -40,7 +40,7 @@ export const getRooms = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong: "1.000.000vnd",
     },
     {
       so_phong: "A103",
@@ -52,7 +52,7 @@ export const getRooms = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong:"1.000.000vnd",
     },
     {
       so_phong: "A104",
@@ -64,7 +64,7 @@ export const getRooms = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong:"1.000.000vnd",
     },
     {
       so_phong: "A105",
@@ -76,7 +76,7 @@ export const getRooms = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong: "1.000.000vnd",
     },
     {
       so_phong: "A106",
@@ -88,7 +88,7 @@ export const getRooms = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong: "1.000.000vnd",
     },
   ];
 };
@@ -109,7 +109,7 @@ export const getBookings = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong: "1.000.000vnd",
     },
     {
       so_phong: "A102",
@@ -121,7 +121,7 @@ export const getBookings = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong: "1.000.000vnd",
     },
     {
       so_phong: "A103",
@@ -133,7 +133,7 @@ export const getBookings = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong:"1.000.000vnd",
     },
     {
       so_phong: "A104",
@@ -145,7 +145,7 @@ export const getBookings = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong: "1.000.000vnd",
     },
     {
       so_phong: "A105",
@@ -157,7 +157,7 @@ export const getBookings = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong: "1.000.000vnd",
     },
     {
       so_phong: "A106",
@@ -169,7 +169,7 @@ export const getBookings = async () => {
         "https://www.hotelgrandsaigon.com/wp-content/uploads/sites/227/2017/12/GRAND_DLXK_01-340x227.jpg",
         "https://www.hotelgrandsaigon.com/wp-content/upload…ites/227/2017/12/GRAND_LSSK_LIVING_02-340x227.jpg",
       ],
-      gia_phong: 100000,
+      gia_phong:"1.000.000vnd",
     },
   ];
 };

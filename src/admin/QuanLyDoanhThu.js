@@ -4,7 +4,7 @@ import { Tabs, Space, Table, Button, Modal, Card, Col, Row } from "antd";
 import Loader from "../components/Error";
 import Error from "../components/Error";
 import { getRooms } from "../services/api";
-import { Line, Bar } from "react-chartjs-2";
+// import { Line, Bar } from "react-chartjs-2";
 export default function QuanLyDoanhThu() {
   const data = {
     labels: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05'],
@@ -49,17 +49,17 @@ export default function QuanLyDoanhThu() {
       <Row gutter={16}>
         <Col span={8}>
           <Card title="Tổng doanh thu" bordered={false}>
-            100.000
+            100.000vnd
           </Card>
         </Col>
         <Col span={8}>
           <Card title="Đặt phòng" bordered={false}>
-            70.000
+            70.000vnd
           </Card>
         </Col>
         <Col span={8}>
           <Card title="Dịch vụ" bordered={false}>
-            30.000
+            30.000vnd
           </Card>
         </Col>
       </Row>

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "../index.css";
 import { Link } from "react-router-dom";
-import { Space, Table,Button, Image, Modal } from "antd";
+import { Space, Table,Button, Image, Modal,message } from "antd";
+
 
 function Room({ rooms, fromdate, todate }) {
   const [show, setShow] = useState(false);
@@ -68,11 +69,16 @@ function Room({ rooms, fromdate, todate }) {
     setIsModalVisible(true);
   };
 
+
+
   const handleOk = () => {
+    // Xử lý logic khi nhấn nút OK
+    message.success('Đặt thành công'); // Hiển thị thông báo thành công
     setIsModalVisible(false);
   };
 
   const handleCancel = () => {
+    message.warning('Hủy đặt phòng thành công'); 
     setIsModalVisible(false);
   };
   return (
@@ -82,6 +88,8 @@ function Room({ rooms, fromdate, todate }) {
         <Table dataSource={rooms} columns={columns} rowKey="id" />
         <Modal
           title="Chi tiết đặt phòng"
+          okText="Đặt ngay"    // Đổi tên nút
+          cancelText="Hủy đặt phòng"
           visible={isModalVisible}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -121,14 +129,15 @@ export function DatPhong() {
   return (
     <div>
       {/* Hiển thị thông tin chi tiết ở đây */}
-      <p>Ngày nhận phòng: 09/12/2023</p>
-      <p>Ngày trả phòng:  12/12/2023</p>
-      <p>Người lớn: 1</p>
-      <p>Trẻ em: 1</p>
       <p>Họ và tên: Lê Bá Nhật</p>
       <p>Số điện thoại: 012345678</p>
       <p>Email: nhat@gmail.com</p>
-      <p>Yêu cầu đặc biệt: Xe máy</p>
+      <p>Ngày nhận phòng: 09/12/2023</p>
+      <p>Ngày trả phòng:  12/12/2023</p>
+      <p>Người lớn: 1       Trẻ em: 1</p>
+      <p>Số ngày đặt: 3 ngày (1.500.000vnđ)</p>
+      <p>Yêu cầu dịch vụ: Xe máy (100k)</p>
+      <p>TỔNG TIỀN : 1.600.000vnđ</p>
     </div>
   );
 }

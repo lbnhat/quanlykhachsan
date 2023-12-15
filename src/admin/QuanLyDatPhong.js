@@ -33,7 +33,7 @@ export default function QuanLyDatPhong() {
   };
 
   const handleNumberOfRoomsChange = (value) => {
-     console.log("Number of Rooms:", value);
+    console.log("Number of Rooms:", value);
     setNumberOfRooms(value);
   };
 
@@ -64,14 +64,54 @@ export default function QuanLyDatPhong() {
             tang: "1",
             loai_phong: "Đơn",
             hang_phong: "VIP",
-            gia: "100.000vnđ",
-            tong_gia: "300.000vnđ",
+            gia: "500.000vnđ/1đêm",
+            tong_gia: "1.500.000vnđ",
           },
-          thong_tin_dat_phong:{
-            ngay_den:"09/12/2023",
-            ngay_di:"12/12/2023",
-            thoi_gian:3
-          }
+          thong_tin_dich_vu: {
+            ten_dich_vu: "xe máy",
+            so_luong: "1",
+            gia: "100.000vnđ",
+          },
+          thong_tin_tong_tien:{
+            gia_phong: "1.500.000vnđ",
+            gia_dich_vu: "100.000vnđ",
+            tong_tien: "1.600.000vnđ"
+          },
+          thong_tin_dat_phong: {
+            ngay_den: "09/12/2023",
+            ngay_di: "12/12/2023",
+            thoi_gian: "3 ngày",
+          },
+        },
+        {
+          ma_dat_phong: "001",
+          thong_tin_khach_hang: {
+            ten_khach_hang: "Lê Bá Nhật",
+            sdt: "0968991331",
+          },
+          thong_tin_phong: {
+            ma_phong: "A1",
+            tang: "1",
+            loai_phong: "Đơn",
+            hang_phong: "VIP",
+            gia: "500.000vnđ/1đêm",
+            tong_gia: "1.500.000vnđ",
+          },
+          thong_tin_dich_vu: {
+            ten_dich_vu: "xe máy",
+            so_luong: "1",
+            gia: "100.000vnđ",
+          },
+          thong_tin_tong_tien:{
+            gia_phong: "1.500.000vnđ",
+            gia_dich_vu: "100.000vnđ",
+            tong_tien: "1.600.000vnđ"
+          },
+          thong_tin_dat_phong: {
+            ngay_den: "13/12/2023",
+            ngay_di: "15/12/2023",
+            thoi_gian: "3 ngày",
+          },
         },
       ];
       setRooms(data);
@@ -105,21 +145,6 @@ export default function QuanLyDatPhong() {
       ),
     },
     {
-      title: "Phòng",
-      dataIndex: "thong_tin_phong",
-      key: "thong_tin_phong",
-      render: (thong_tin_phong) => (
-        <div>
-          <p>Mã phòng: {thong_tin_phong.ma_phong}</p>
-          <p>Tầng : {thong_tin_phong.tang} - {thong_tin_phong.loai_phong} - {thong_tin_phong.hang_phong}</p>
-          {/* <p>Loại phòng : {thong_tin_phong.loai_phong}</p> */}
-          {/* <p>Hạng phòng : {thong_tin_phong.hang_phong}</p> */}
-          <p>Giá : {thong_tin_phong.gia}</p>
-          <p>Tổng giá : {thong_tin_phong.tong_gia}</p>
-        </div>
-      ),
-    },
-    {
       title: "Thông tin đặt phòng",
       dataIndex: "thong_tin_dat_phong",
       key: "thong_tin_dat_phong",
@@ -132,6 +157,54 @@ export default function QuanLyDatPhong() {
       ),
     },
     {
+      title: "Phòng",
+      dataIndex: "thong_tin_phong",
+      key: "thong_tin_phong",
+      render: (thong_tin_phong) => (
+        <div>
+          <p>Mã phòng: {thong_tin_phong.ma_phong}</p>
+          <p>
+            Tầng : {thong_tin_phong.tang} - {thong_tin_phong.loai_phong} -{" "}
+            {thong_tin_phong.hang_phong}
+          </p>
+          {/* <p>Loại phòng : {thong_tin_phong.loai_phong}</p> */}
+          {/* <p>Hạng phòng : {thong_tin_phong.hang_phong}</p> */}
+          <p>Giá : {thong_tin_phong.gia}</p>
+          <p>Tổng giá : {thong_tin_phong.tong_gia}</p>
+        </div>
+      ),
+    },
+    {
+      title: "Dịch vụ",
+      dataIndex: "thong_tin_dich_vu",
+      key: "thong_tin_dich_vu",
+      render: (thong_tin_dich_vu) => (
+        <div>
+          <p>Tên dịch vụ: {thong_tin_dich_vu.ten_dich_vu}</p>
+
+          {/* <p>Loại phòng : {thong_tin_phong.loai_phong}</p> */}
+          {/* <p>Hạng phòng : {thong_tin_phong.hang_phong}</p> */}
+          <p>Số Lượng : {thong_tin_dich_vu.so_luong}</p>
+          <p>Giá: {thong_tin_dich_vu.gia}</p>
+        </div>
+      ),
+    },
+    {
+      title: "Tổng tiền",
+      dataIndex: "thong_tin_tong_tien",
+      key: "thong_tin_tong_tien",
+      render: (thong_tin_tong_tien) => (
+        <div>
+          <p>Giá phòng: {thong_tin_tong_tien.gia_phong}</p>
+
+          {/* <p>Loại phòng : {thong_tin_phong.loai_phong}</p> */}
+          {/* <p>Hạng phòng : {thong_tin_phong.hang_phong}</p> */}
+          <p>Giá dịch vụ : {thong_tin_tong_tien.gia_dich_vu}</p>
+          <p>Tổng tiền : {thong_tin_tong_tien.tong_tien}</p>
+        </div>
+      ),
+    },
+    {
       title: "",
       key: "action",
       render: (_, record) => (
@@ -139,7 +212,14 @@ export default function QuanLyDatPhong() {
           {e === "cho_xac_nhan" && (
             <>
               <Space size="middle">
-                <Button type="primary">Xác nhận đặt phòng</Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    message.success("Đặt thành công");
+                  }}
+                >
+                  Xác nhận đặt phòng
+                </Button>
               </Space>
               <Space size="middle">
                 <Button
@@ -148,6 +228,9 @@ export default function QuanLyDatPhong() {
                     background: "#d9d9d9",
                     borderColor: "#d9d9d9",
                     color: "rgba(0, 0, 0, 0.45)",
+                  }}
+                  onClick={() => {
+                    message.warning("Hủy thành công");
                   }}
                 >
                   Hủy đặt phòng
@@ -165,6 +248,9 @@ export default function QuanLyDatPhong() {
                     borderColor: "#4CAF50",
                     color: "white",
                   }}
+                  onClick={() => {
+                    message.success("Thanh toán thành công");
+                  }}
                 >
                   Xác nhận thanh toán
                 </Button>
@@ -176,6 +262,9 @@ export default function QuanLyDatPhong() {
                     background: "#d9d9d9",
                     borderColor: "#d9d9d9",
                     color: "rgba(0, 0, 0, 0.45)",
+                  }}
+                  onClick={() => {
+                    message.warning("Hủy thành công");
                   }}
                 >
                   Hủy đặt phòng
