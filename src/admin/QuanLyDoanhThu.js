@@ -4,43 +4,53 @@ import { Tabs, Space, Table, Button, Modal, Card, Col, Row } from "antd";
 import Loader from "../components/Error";
 import Error from "../components/Error";
 import { getRooms } from "../services/api";
-// import { Line, Bar } from "react-chartjs-2";
+import ReactApexChart from "react-apexcharts";
 export default function QuanLyDoanhThu() {
-  const data = {
-    labels: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05'],
-    datasets: [
-      {
-        label: 'Doanh số bán hàng',
-        data: [10, 20, 30, 40, 50],
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
 
+  const series = [
+    {
+      name: "Desktops",
+      data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 141, 68, 47],
+    },
+  ];
   const options = {
-    scales: {
-      xAxes: [
-        {
-          type: 'time', // Ensure the x-axis is treated as a time scale
-          time: {
-            unit: 'day', // You can adjust the time unit as needed (day, month, year, etc.)
-            displayFormats: {
-              day: 'YYYY-MM-DD', // Format for displaying days
-            },
-          },
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-        },
+    chart: {
+      height: 350,
+      type: "line",
+      zoom: {
+        enabled: false,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: "straight",
+    },
+    title: {
+      text: "Biểu đồ doanh thu",
+      align: "left",
+    },
+    grid: {
+      row: {
+        colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+        opacity: 0.5,
+      },
+    },
+    xaxis: {
+      categories: [
+        "Tháng 1",
+        "Tháng 2",
+        "Tháng 3",
+        "Tháng 4",
+        "Tháng 5",
+        "Tháng 6",
+        "Tháng 7",
+        "Tháng 8",
+        "Tháng 9",
+        "Tháng 10",
+        "Tháng 11",
+        "Tháng 12",
       ],
     },
   };
@@ -71,11 +81,19 @@ export default function QuanLyDoanhThu() {
         </button> */}
 
       <Row>
-        <Col span={4}></Col>
-        <Col span={8}>
+        <Col span={1}></Col>
+        <Col span={22}>
           {/* <Line data={data} options={options} /> */}
+          <div id="chart">
+            <ReactApexChart
+              options={options}
+              series={series}
+              type="line"
+              height={350}
+            />
+          </div>
         </Col>
-        <Col span={12}></Col>
+        <Col span={1}></Col>
       </Row>
     </div>
   );
