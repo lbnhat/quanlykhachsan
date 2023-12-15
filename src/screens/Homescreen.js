@@ -27,6 +27,7 @@ function Homescreen() {
   const [fromdate, setfromdate] = useState();
   const [todate, settodate] = useState();
   const [isModalVisible, setIsModalVisible] = useState(true);
+
   useEffect(async () => {
     try {
       setLoading(true);
