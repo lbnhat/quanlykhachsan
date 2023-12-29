@@ -135,6 +135,7 @@ export function DatPhong() {
       <p>Ngày nhận phòng: 09/12/2023</p>
       <p>Ngày trả phòng:  12/12/2023</p>
       <p>Người lớn: 1       Trẻ em: 1</p>
+      <p>Hạng phòng: VIP</p>
       <p>Số ngày đặt: 3 ngày (1.500.000vnđ)</p>
       <p>Yêu cầu dịch vụ: Xe máy (100k)</p>
       <p>TỔNG TIỀN : 1.600.000vnđ</p>

@@ -205,6 +205,18 @@ function Homescreen() {
                 <InputNumber min={0} />
               </Form.Item>
             </Col>
+            
+            <Col span={2}>
+              <Form.Item
+                label="Hạng phòng"
+                name="hang_phong"
+                rules={[
+                  { required: false, message: "Vui lòng nhập hạng phòng!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
 
             <Col span={2}>
               <Form.Item label="   ">

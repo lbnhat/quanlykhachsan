@@ -9,20 +9,20 @@ export default function QuanLyDichVu() {
     const [users, setusers] = useState([]);
     const [loading, setloading] = useState(true);
     const [error, seterror] = useState();
+    const [dichVu, setDichVu] = useState();
+    const [typeAction, setTypeAction] = useState();
+    const [titleModal, setTitleModal] = useState();
   
     const [isModalClose, setIsModalClose] = useState(false);
-    const showModal = () => {
-      setIsModalClose(true);
-    };
-    const handleOk = () => {
-      setIsModalClose(false);
-    };
-    const handleCancel = () => {
-      setIsModalClose(false);
-    };
-  
     useEffect(async () => {
       try {
+
+        
+      const data = await (
+        await axios.get(
+          "http://localhost:8888/api/dich-vu"
+        )
+      ).data.data;
         // const admin = localStorage.getItem('admin');
         // if (admin) {
         //   window.location.href = "/home";
@@ -34,23 +34,26 @@ export default function QuanLyDichVu() {
         //     "https://hotelwebsite-backend.herokuapp.com/api/v1/getallusers"
         //   )
         // ).data;
-        let data = [
-          {
-            ten_dich_vu: "xe máy",
-            so_luong: "1",
-            gia_dich_vu: "100k",
-          },
-          {
-            ten_dich_vu: "Giặt ủi",
-            so_luong: "1",
-            gia_dich_vu: "100k",
-          },
-          {
-            ten_dich_vu: "ăn uống",
-            so_luong: "1",
-            gia_dich_vu: "100k",
-          },
-        ];
+        // let data = [
+        //   {
+        //     id_dich_vu: "02",
+        //     ten_dich_vu: "xe máy",
+        //     so_luong: "1",
+        //     gia_dich_vu: "100k",
+        //   },
+        //   {
+        //     id_dich_vu: "02",
+        //     ten_dich_vu: "Giặt ủi",
+        //     so_luong: "1",
+        //     gia_dich_vu: "100k",
+        //   },
+        //   {
+        //     id_dich_vu: "02",
+        //     ten_dich_vu: "ăn uống",
+        //     so_luong: "1",
+        //     gia_dich_vu: "100k",
+        //   },
+        // ];
   
         setusers(data);
         setloading(false);
@@ -60,6 +63,46 @@ export default function QuanLyDichVu() {
         seterror(error);
       }
     }, []);
+
+    
+  const showModal = (dichVu, action) => {
+    if (action === "xem_chi_tiet") {
+      setTitleModal("Xem chi tiết");
+      setDichVu(dichVu);
+    } else if (action === "chinh_sua") {
+      setTitleModal("Chỉnh sửa");
+      setDichVu(dichVu);
+    } else if (action === "them_dich_vu") {
+      setTitleModal("Thêm dịch vụ");
+      setDichVu({
+        id_dich_vu: "",
+        ten_dich_vu: "",
+        so_luong: "",
+        gia_dich_vu: "",
+      });
+    }
+    setTypeAction(action);
+    setIsModalClose(true);
+  };
+  const handleOk = () => {
+    setIsModalClose(false);
+    setDichVu({
+      id_dich_vu: "",
+      ten_dich_vu: "",
+      so_luong: "",
+      gia_dich_vu: "",
+    });
+  };
+  const handleCancel = () => {
+    setIsModalClose(false);
+    setDichVu({
+      id_dich_vu: "",
+      ten_dich_vu: "",
+      so_luong: "",
+      gia_dich_vu: "",
+    });
+  };
+
   
     const columns = [
       {
@@ -81,11 +124,25 @@ export default function QuanLyDichVu() {
       {
         title: "",
         key: "action",
-        render: (_, record) => (
+        render: (_, dichVuTren1Dong) => (
           <Space size="middle">
-            <Button type="primary">Xem chi tiết</Button>
-            <Button type="primary">Chỉnh sữa</Button>
-          </Space>
+          <Button
+            type="primary"
+            onClick={() => {
+              showModal(dichVuTren1Dong, "xem_chi_tiet");
+            }}
+          >
+            Xem chi tiết
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              showModal(dichVuTren1Dong, "chinh_sua");
+            }}
+          >
+            Chỉnh sữa
+          </Button>
+        </Space>
         ),
       },
     ];
@@ -95,16 +152,21 @@ export default function QuanLyDichVu() {
         <div className="col-md-10">
           <h2>Danh sách dịch vụ</h2>
           <>
-            <Button type="primary" onClick={showModal}>
-              Thêm dịch vụ
-            </Button>
-            <Modal
-              title="Thêm dịch vụ"
-              visible={isModalClose}
-              onOk={handleOk}
-              onCancel={handleCancel}
-            >
-              <ThemDichVu />
+          <Button
+            type="primary"
+            onClick={() => {
+              showModal(null, "them_dich_vu");
+            }}
+          >
+            Thêm dịch vụ
+          </Button>
+          <Modal
+            title={titleModal}
+            visible={isModalClose}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          >
+              <ThemDichVu dichVu={dichVu} typeAction={typeAction} />
             </Modal>
           </>
           <div>
@@ -114,13 +176,30 @@ export default function QuanLyDichVu() {
       </div>
     );
   }
-  export function ThemDichVu(props) {
-    const [ten_dich_vu, setTenDichVu] = useState("");
-    const [so_luong, setSoLuong] = useState();
-    const [gia_dich_vu, setGiaDichVu] = useState();
+  export function ThemDichVu(dichVuTuBang) {
+    const [id_dich_vu, setMaDichVu] = useState(dichVuTuBang.dichVu.id_dich_vu);
+    const [ten_dich_vu, setTenDichVu] = useState(dichVuTuBang.dichVu.ten_dich_vu);
+    const [so_luong, setSoLuong] = useState(dichVuTuBang.dichVu.so_luong);
+    const [gia_dich_vu, setGiaDichVu] = useState(dichVuTuBang.dichVu.gia_dich_vu);
+    const [disabledInput, setDisabledInput] = useState(false);
+
+    
+  useEffect(async () => {
+    try {
+      setMaDichVu(dichVuTuBang.dichVu.id_dich_vu);
+      setTenDichVu(dichVuTuBang.dichVu.ten_dich_vu);
+      setSoLuong(dichVuTuBang.dichVu.so_luong);
+      setGiaDichVu(dichVuTuBang.dichVu.gia_dich_vu);
+      if (dichVuTuBang.typeAction === "xem_chi_tiet") {
+        setDisabledInput(true);
+      } else {
+        setDisabledInput(false);
+      }
+    } catch (error) {}
+  }, [dichVuTuBang]);
   
     async function ThemDichvu() {
-      let newroom = {
+      let newDichVu = {
         ten_dich_vu,
         so_luong,
         gia_dich_vu,
@@ -139,10 +218,10 @@ export default function QuanLyDichVu() {
         //   )
         // ).data;
         if (ten_dich_vu === "" || so_luong === "" || gia_dich_vu === "") {
-          newroom = null;
+          newDichVu = null;
         }
   
-        props.parentCallback(newroom);
+        dichVuTuBang.parentCallback(newDichVu);
         setTenDichVu("");
         setSoLuong("");
         setGiaDichVu("");
@@ -153,29 +232,41 @@ export default function QuanLyDichVu() {
   
     return (
       <div className="row">
+           <label htmlFor="ten_dich_vu" style={{ fontWeight: "bold" }}>
+        Tên dịch vụ:
+      </label>
         <input
           value={ten_dich_vu}
           onChange={(e) => {
             setTenDichVu(e.target.value);
           }}
+          disabled={disabledInput}
           type="text"
           className="form-control my-1"
           placeholder="Tên dịch vụ"
         />
+             <label htmlFor="so_luong" style={{ fontWeight: "bold" }}>
+       Số lượng:
+      </label>
         <input
           value={so_luong}
           onChange={(e) => {
             setSoLuong(e.target.value);
           }}
+          disabled={disabledInput}
           type="text"
           className="form-control my-1"
           placeholder="Số lượng"
         />
+             <label htmlFor="gia_dich_vu" style={{ fontWeight: "bold" }}>
+       Giá dịch vụ:
+      </label>
         <input
           value={gia_dich_vu}
           onChange={(e) => {
             setGiaDichVu(e.target.value);
           }}
+          disabled={disabledInput}
           type="text"
           className="form-control my-1"
           placeholder="Giá dịch vụ"

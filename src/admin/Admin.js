@@ -5,7 +5,7 @@ import Loader from "../components/Error";
 import Error from "../components/Error";
 import { getRooms } from "../services/api";
 import QuanLyNhanVien from "./QuanLyNhanVien";
-import KhachHang from "./KhachHang";
+import QuanLyKhachHang from "./QuanLyKhachHang";
 import QuanLyPhong from "./QuanLyPhong";
 import QuanLyDichVu from "./QuanLyDichVu";
 import QuanLyDatPhong from "./QuanLyDatPhong";
@@ -32,7 +32,7 @@ function Adminscreen() {
             <QuanLyNhanVien />
           </TabPane>
           <TabPane tab="Quản lý khách hàng" key="2">
-            <KhachHang />
+            <QuanLyKhachHang />
           </TabPane>
       
           <TabPane tab="Quản lý phòng" key="3">

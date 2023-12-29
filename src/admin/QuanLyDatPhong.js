@@ -11,6 +11,7 @@ import {
   Table,
   Image,
 } from "antd";
+import axios from "axios";
 import "antd/dist/antd.css";
 import Loader from "react-spinners/RingLoader";
 import locale from "antd/lib/date-picker/locale/vi_VN";
@@ -25,6 +26,7 @@ export default function QuanLyDatPhong() {
   const [loading, setLoading] = useState();
   const [fromdate, setfromdate] = useState();
   const [todate, settodate] = useState();
+  
 
   const handleDateChange = (dates, dateStrings) => {
     console.log("Selected Dates:", dates);
@@ -49,76 +51,84 @@ export default function QuanLyDatPhong() {
   useEffect(async () => {
     try {
       setLoading(true);
+
+      const data = await (
+        await axios.get(
+          "http://localhost:8888/api/phieu-dat-phong"
+        )
+      ).data.data;
       // const data = (
       //   await axios.post("https://hotelwebsite-backend.herokuapp.com/api/v1/getallrooms", {})
       // ).data.result;
-      let data = [
-        {
-          ma_dat_phong: "001",
-          thong_tin_khach_hang: {
-            ten_khach_hang: "Lê Bá Nhật",
-            sdt: "0968991331",
-          },
-          thong_tin_phong: {
-            ma_phong: "A1",
-            tang: "1",
-            loai_phong: "Đơn",
-            hang_phong: "VIP",
-            gia: "500.000vnđ/1đêm",
-            tong_gia: "1.500.000vnđ",
-          },
-          thong_tin_dich_vu: {
-            ten_dich_vu: "xe máy",
-            so_luong: "1",
-            gia: "100.000vnđ",
-          },
-          thong_tin_tong_tien:{
-            gia_phong: "1.500.000vnđ",
-            gia_dich_vu: "100.000vnđ",
-            tong_tien: "1.600.000vnđ"
-          },
-          thong_tin_dat_phong: {
-            ngay_den: "09/12/2023",
-            ngay_di: "12/12/2023",
-            thoi_gian: "3 ngày",
-          },
-        },
-        {
-          ma_dat_phong: "001",
-          thong_tin_khach_hang: {
-            ten_khach_hang: "Lê Bá Nhật",
-            sdt: "0968991331",
-          },
-          thong_tin_phong: {
-            ma_phong: "A1",
-            tang: "1",
-            loai_phong: "Đơn",
-            hang_phong: "VIP",
-            gia: "500.000vnđ/1đêm",
-            tong_gia: "1.500.000vnđ",
-          },
-          thong_tin_dich_vu: {
-            ten_dich_vu: "xe máy",
-            so_luong: "1",
-            gia: "100.000vnđ",
-          },
-          thong_tin_tong_tien:{
-            gia_phong: "1.500.000vnđ",
-            gia_dich_vu: "100.000vnđ",
-            tong_tien: "1.600.000vnđ"
-          },
-          thong_tin_dat_phong: {
-            ngay_den: "13/12/2023",
-            ngay_di: "15/12/2023",
-            thoi_gian: "3 ngày",
-          },
-        },
-      ];
-      setRooms(data);
-      setLoading(false);
+      // let data = [
+      //   {
+      //     id_phieu_dat_phong: "001",
+      //     thong_tin_khach_hang: {
+      //       ten_khach_hang: "Lê Bá Nhật",
+      //       sdt: "0968991331",
+      //     },
+      //     thong_tin_phong: {
+      //       ma_phong: "A1",
+      //       tang: "1",
+      //       loai_phong: "Đơn",
+      //       hang_phong: "VIP",
+      //       gia: "500.000vnđ/1đêm",
+      //       tong_gia: "1.500.000vnđ",
+      //     },
+      //     thong_tin_dich_vu: {
+      //       ten_dich_vu: "xe máy",
+      //       so_luong: "1",
+      //       gia: "100.000vnđ",
+      //     },
+      //     thong_tin_tong_tien:{
+      //       gia_phong: "1.500.000vnđ",
+      //       gia_dich_vu: "100.000vnđ",
+      //       tong_tien: "1.600.000vnđ"
+      //     },
+      //     thong_tin_dat_phong: {
+      //       ngay_den: "09/12/2023",
+      //       ngay_di: "12/12/2023",
+      //       thoi_gian: "3 ngày",
+      //     },
+      //   },
+      //   {
+      //     id_phieu_dat_phong: "001",
+      //     thong_tin_khach_hang: {
+      //       ten_khach_hang: "Lê Bá Nhật",
+      //       sdt: "0968991331",
+      //     },
+      //     thong_tin_phong: {
+      //       ma_phong: "A1",
+      //       tang: "1",
+      //       loai_phong: "Đơn",
+      //       hang_phong: "VIP",
+      //       gia: "500.000vnđ/1đêm",
+      //       tong_gia: "1.500.000vnđ",
+      //     },
+      //     thong_tin_dich_vu: {
+      //       ten_dich_vu: "xe máy",
+      //       so_luong: "1",
+      //       gia: "100.000vnđ",
+      //     },
+      //     thong_tin_tong_tien:{
+      //       gia_phong: "1.500.000vnđ",
+      //       gia_dich_vu: "100.000vnđ",
+      //       tong_tien: "1.600.000vnđ"
+      //     },
+      //     thong_tin_dat_phong: {
+      //       ngay_den: "13/12/2023",
+      //       ngay_di: "15/12/2023",
+      //       thoi_gian: "3 ngày",
+      //     },
+      //   },
+      // ];
+      setfromdate(data);
+      settodate(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
+      setfromdate(error);
+      settodate(false);
+      
     }
   }, []);
 
@@ -130,8 +140,8 @@ export default function QuanLyDatPhong() {
   const columns = (e) => [
     {
       title: "Mã đặt phòng",
-      dataIndex: "ma_dat_phong",
-      key: "ma_dat_phong",
+      dataIndex: "id_phieu_dat_phong",
+      key: "id_phieu_dat_phong",
     },
     {
       title: "Thông tin khách hàng",

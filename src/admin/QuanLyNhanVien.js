@@ -3,7 +3,7 @@ import axios from "axios";
 import { Tabs, Space, Table, Button, Modal, Card, Col, Row } from "antd";
 import Loader from "../components/Error";
 import Error from "../components/Error";
-import { getRooms } from "../services/api";
+import {getNhanVien, getRooms } from "../services/api";
 const { TabPane } = Tabs;
 export default function QuanLyNhanVien() {
   const [users, setusers] = useState([]);
@@ -12,9 +12,17 @@ export default function QuanLyNhanVien() {
   const [nhanVien, setNhanVien] = useState();
   const [typeAction, setTypeAction] = useState();
   const [titleModal, setTitleModal] = useState();
+  const [isModalClose, setIsModalClose] = useState(false);
+  const [duplicateNhanVien, setduplicateNhanVien] = useState();
 
   useEffect(async () => {
     try {
+
+      const data = await (
+        await axios.get(
+          "http://localhost:8888/api/nhan-vien"
+        )
+      ).data.data;
       // const admin = localStorage.getItem('admin');
       // if (admin) {
       //   window.location.href = "/home";
@@ -26,36 +34,44 @@ export default function QuanLyNhanVien() {
       //     "https://hotelwebsite-backend.herokuapp.com/api/v1/getallusers"
       //   )
       // ).data;
-      let data = [
-        {
-          ma_nhan_vien: "01",
-          ten_nhan_vien: "Lê Bá Nhật",
-          sdt: "0789963234",
-          chuc_vu: "Nhân viên",
-          dia_chi: "46 xuân đán 1",
-        },
-        {
-          ma_nhan_vien: "02",
-          ten_nhan_vien: "Lê Bá Nhật",
-          sdt: "0789963234",
-          chuc_vu: "Nhân viên",
-          dia_chi: "46 xuân đán 1",
-        },
-        {
-          ma_nhan_vien: "03",
-          ten_nhan_vien: "Lê Bá Nhật",
-          sdt: "0789963234",
-          chuc_vu: "Nhân viên",
-          dia_chi: "46 xuân đán 1",
-        },
-        {
-          ma_nhan_vien: "04",
-          ten_nhan_vien: "Lê Bá Nhật",
-          sdt: "0789963234",
-          chuc_vu: "Nhân viên",
-          dia_chi: "46 xuân đán 1",
-        },
-      ];
+      // let data = [
+      //   {
+      //     ma_nhan_vien: "01",
+      //     ten_nhan_vien: "Lê Bá Nhật",
+      //     gioi_tinh:"Nam",
+      //     so_cmnd:"84232839",
+      //     sdt: "0789963234",
+      //     chuc_vu: "Nhân viên",
+      //     dia_chi: "46 xuân đán 1",
+      //   },
+      //   {
+      //     ma_nhan_vien: "02",
+      //     ten_nhan_vien: "Lê Bá Nhật",
+      //     gioi_tinh:"Nam",
+      //     so_cmnd:"84232839",
+      //     sdt: "0789963234",
+      //     chuc_vu: "Nhân viên",
+      //     dia_chi: "46 xuân đán 1",
+      //   },
+      //   {
+      //     ma_nhan_vien: "03",
+      //     ten_nhan_vien: "Lê Bá Nhật",
+      //     gioi_tinh:"Nam",
+      //     so_cmnd:"84232839",
+      //     sdt: "0789963234",
+      //     chuc_vu: "Nhân viên",
+      //     dia_chi: "46 xuân đán 1",
+      //   },
+      //   {
+      //     ma_nhan_vien: "04",
+      //     ten_nhan_vien: "Lê Bá Nhật",
+      //     gioi_tinh:"Nam",
+      //     so_cmnd:"84232839",
+      //     sdt: "0789963234",
+      //     chuc_vu: "Nhân viên",
+      //     dia_chi: "46 xuân đán 1",
+      //   },
+      // ];
 
       setusers(data);
       setloading(false);
@@ -65,7 +81,7 @@ export default function QuanLyNhanVien() {
       seterror(error);
     }
   }, []);
-  const [isModalClose, setIsModalClose] = useState(false);
+
 
   const showModal = (nhanVien, action) => {
     if (action === "xem_chi_tiet") {
@@ -77,8 +93,10 @@ export default function QuanLyNhanVien() {
     } else if (action === "them_nhan_vien") {
       setTitleModal("Thêm nhân viên");
       setNhanVien({
-        ma_nhan_vien: "",
+        id_nhan_vien: "",
         ten_nhan_vien: "",
+        gioi_tinh:"",
+        so_cmnd:"",
         sdt: "",
         chuc_vu: "",
         dia_chi: "",
@@ -90,21 +108,27 @@ export default function QuanLyNhanVien() {
   const handleOk = () => {
     setIsModalClose(false);
     setNhanVien({
-      ma_nhan_vien: "",
+      id_nhan_vien: "",
       ten_nhan_vien: "",
+      gioi_tinh:"",
+      so_cmnd:"",
       sdt: "",
       chuc_vu: "",
       dia_chi: "",
+      ngay_vao_lam: "",
     });
   };
   const handleCancel = () => {
     setIsModalClose(false);
     setNhanVien({
-      ma_nhan_vien: "",
+      id_nhan_vien: "",
       ten_nhan_vien: "",
+      gioi_tinh:"",
+      so_cmnd:"",
       sdt: "",
       chuc_vu: "",
       dia_chi: "",
+      ngay_vao_lam: "",
     });
   };
 
@@ -113,6 +137,16 @@ export default function QuanLyNhanVien() {
       title: "Tên nhân viên",
       dataIndex: "ten_nhan_vien",
       key: "ten_nhan_vien",
+    },
+    {
+      title: "Giới tính",
+      dataIndex: "gioi_tinh",
+      key: "gioi_tinh",
+    },
+    {
+      title: "Số CMND",
+      dataIndex: "so_cmnd",
+      key: "so_cmnd",
     },
     {
       title: "Số điện thoại",
@@ -128,6 +162,11 @@ export default function QuanLyNhanVien() {
       title: "Địa chỉ",
       dataIndex: "dia_chi",
       key: "dia_chi",
+    },
+    {
+      title: "Ngày vào làm",
+      dataIndex: "ngay_vao_lam",
+      key: "ngay_vao_lam",
     },
     {
       title: "",
@@ -149,6 +188,14 @@ export default function QuanLyNhanVien() {
             }}
           >
             Chỉnh sữa
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              showModal(nhanVienTren1Dong, "xoa");
+            }}
+          >
+            Xóa
           </Button>
         </Space>
       ),
@@ -185,10 +232,10 @@ export default function QuanLyNhanVien() {
   );
 }
 export function NhanVien(nhanVienTuBang) {
-  const [ma_nhan_vien, setMaNhanVien] = useState(nhanVienTuBang.nhanVien.ma_nhan_vien);
-  const [ten_nhan_vien, setTenNhanVien] = useState(
-    nhanVienTuBang.nhanVien.ten_nhan_vien
-  );
+  const [id_nhan_vien, setMaNhanVien] = useState(nhanVienTuBang.nhanVien.id_nhan_vien);
+  const [ten_nhan_vien, setTenNhanVien] = useState( nhanVienTuBang.nhanVien.ten_nhan_vien );
+  const [gioi_tinh, setGioiTinh] = useState( nhanVienTuBang.nhanVien.gioi_tinh );
+  const [so_cmnd, setSoChungMinhNhanDan] = useState( nhanVienTuBang.nhanVien.so_cmnd );
   const [sdt, setSoDienThoai] = useState(nhanVienTuBang.nhanVien.sdt);
   const [chuc_vu, setChucVu] = useState(nhanVienTuBang.nhanVien.chuc_vu);
   const [dia_chi, setDiaChi] = useState(nhanVienTuBang.nhanVien.dia_chi);
@@ -196,8 +243,10 @@ export function NhanVien(nhanVienTuBang) {
 
   useEffect(async () => {
     try {
-      setMaNhanVien(nhanVienTuBang.nhanVien.ma_nhan_vien);
+      setMaNhanVien(nhanVienTuBang.nhanVien.id_nhan_vien);
       setTenNhanVien(nhanVienTuBang.nhanVien.ten_nhan_vien);
+      setGioiTinh(nhanVienTuBang.nhanVien.gioi_tinh);
+      setSoChungMinhNhanDan(nhanVienTuBang.nhanVien.so_cmnd);
       setSoDienThoai(nhanVienTuBang.nhanVien.sdt);
       setChucVu(nhanVienTuBang.nhanVien.chuc_vu);
       setDiaChi(nhanVienTuBang.nhanVien.dia_chi);
@@ -212,6 +261,8 @@ export function NhanVien(nhanVienTuBang) {
   async function ThemNhanVien() {
     let newNhanVien = {
       ten_nhan_vien,
+      gioi_tinh,
+      so_cmnd,
       sdt,
       chuc_vu,
       dia_chi,
@@ -232,6 +283,8 @@ export function NhanVien(nhanVienTuBang) {
 
       if (
         ten_nhan_vien === "" ||
+        gioi_tinh === "" ||
+        so_cmnd === "" ||
         sdt === "" ||
         chuc_vu === "" ||
         dia_chi === ""
@@ -241,6 +294,8 @@ export function NhanVien(nhanVienTuBang) {
 
       nhanVienTuBang.parentCallback(newNhanVien);
       setTenNhanVien("");
+      setGioiTinh("");
+      setSoChungMinhNhanDan("");
       setSoDienThoai("");
       setChucVu("");
       setDiaChi("");
@@ -263,7 +318,34 @@ export function NhanVien(nhanVienTuBang) {
         disabled={disabledInput}
         className="form-control my-1"
         placeholder="Nhập tên nhân viên"
+        
       />
+      <label htmlFor="gioi_tinh" style={{ fontWeight: "bold" }}>
+        Giới tính:
+      </label>
+        <input
+          value={gioi_tinh}
+          onChange={(e) => {
+            setGioiTinh(e.target.value);
+          }}
+          disabled={disabledInput}
+          type="text"
+          className="form-control my-1"
+          placeholder="Giới tính"
+        />
+         <label htmlFor="sdt" style={{ fontWeight: "bold" }}>
+        Số CMND:
+      </label>
+        <input
+          value={so_cmnd}
+          onChange={(e) => {
+            setSoChungMinhNhanDan(e.target.value);
+          }}
+          disabled={disabledInput}
+          type="text"
+          className="form-control my-1"
+          placeholder="Số CMND"
+        />
       <label htmlFor="sdt" style={{ fontWeight: "bold" }}>
         Số điện thoại:
       </label>

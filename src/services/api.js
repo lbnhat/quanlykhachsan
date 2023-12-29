@@ -9,6 +9,18 @@ const fetchData = async () => {
       throw error;
     }
   };
+
+  export const getKhachHang = async () => {
+    try {
+      const response = await axios.get('http://localhost:8888/api/khach-hang');
+      console.error("================");
+      console.error( response.data);
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  };
   
   export { fetchData };
 // src/services/api.js

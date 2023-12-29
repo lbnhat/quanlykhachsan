@@ -107,7 +107,7 @@ function DangKy() {
             </button>
 
             <div class="text-center text-sm text-grey-dark mt-4">
-              Bằng cách đồng ý,ban đồng ý với
+              Bằng cách đồng ý, bạn đồng ý với
               <a
                 class="no-underline border-b border-grey-dark text-grey-dark"
                 href="#"
@@ -119,7 +119,7 @@ function DangKy() {
                 class="no-underline border-b border-grey-dark text-grey-dark"
                 href="#"
               >
-                Chính sách quyền rieeg tư
+                Chính sách quyền riêng tư
               </a>
             </div>
           </div>

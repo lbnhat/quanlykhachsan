@@ -9,17 +9,11 @@ export default function QuanLyTaiKhoan() {
     const [users, setusers] = useState([]);
     const [loading, setloading] = useState(true);
     const [error, seterror] = useState();
-  
+    const [taiKhoan, setTaiKhoan] = useState();
+    const [typeAction, setTypeAction] = useState();
+    const [titleModal, setTitleModal] = useState();
     const [isModalClose, setIsModalClose] = useState(false);
-    const showModal = () => {
-      setIsModalClose(true);
-    };
-    const handleOk = () => {
-      setIsModalClose(false);
-    };
-    const handleCancel = () => {
-      setIsModalClose(false);
-    };
+
   
     useEffect(async () => {
       try {
@@ -60,6 +54,43 @@ export default function QuanLyTaiKhoan() {
         seterror(error);
       }
     }, []);
+    const showModal = (taiKhoan, action) => {
+      if (action === "xem_chi_tiet") {
+        setTitleModal("Xem chi tiết");
+        setTaiKhoan(taiKhoan);
+      } else if (action === "chinh_sua") {
+        setTitleModal("Chỉnh sửa");
+        setTaiKhoan(taiKhoan);
+      } else if (action === "them_tai_khoan") {
+        setTitleModal("Thêm tài khoản");
+        setTaiKhoan({
+          ma_tai_khoan: "",
+          ten_ten_tai_khoan: "",
+          mat_khau: "",
+          vai_tro: "",
+        });
+      }
+      setTypeAction(action);
+      setIsModalClose(true);
+    };
+    const handleOk = () => {
+      setIsModalClose(false);
+      setTaiKhoan({
+        ma_tai_khoan: "",
+        ten_ten_tai_khoan: "",
+        mat_khau: "",
+        vai_tro: "",
+      });
+    };
+    const handleCancel = () => {
+      setIsModalClose(false);
+      setTaiKhoan({
+        ma_tai_khoan: "",
+        ten_ten_tai_khoan: "",
+        mat_khau: "",
+        vai_tro: "",
+      });
+    };
   
     const columns = [
       {
@@ -81,10 +112,25 @@ export default function QuanLyTaiKhoan() {
       {
         title: "",
         key: "action",
-        render: (_, record) => (
+        render: (_, taiKhoanTren1Dong) => (
           <Space size="middle">
-            <Button type="primary">Chỉnh sữa</Button>
-          </Space>
+          <Button
+            type="primary"
+            onClick={() => {
+              showModal(taiKhoanTren1Dong, "xem_chi_tiet");
+            }}
+          >
+            Xem chi tiết
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              showModal(taiKhoanTren1Dong, "chinh_sua");
+            }}
+          >
+            Chỉnh sữa
+          </Button>
+        </Space>
         ),
       },
     ];
@@ -94,16 +140,21 @@ export default function QuanLyTaiKhoan() {
         <div className="col-md-10">
           <h2>Danh sách tài khoản</h2>
           <>
-            <Button type="primary" onClick={showModal}>
-              Thêm tài khoản
+          <Button
+            type="primary"
+            onClick={() => {
+              showModal(null, "them_tai_khoan");
+            }}
+          >
+            Thêm tài khoản
             </Button>
             <Modal
-              title="Thêm tài khoản"
+              title="titleModal"
               visible={isModalClose}
               onOk={handleOk}
               onCancel={handleCancel}
             >
-              <ThemTaiKhoan />
+              <ThemTaiKhoan taiKhoan={taiKhoan} typeAction={typeAction} />
             </Modal>
           </>
           <div>
@@ -113,13 +164,27 @@ export default function QuanLyTaiKhoan() {
       </div>
     );
   }
-  export function ThemTaiKhoan(props) {
-    const [ten_tai_khoan, setTenTaiKhoan] = useState("");
-    const [mat_khau, setMatKhau] = useState();
-    const [vai_tro, setVaiTro] = useState();
-  
+  export function ThemTaiKhoan(taiKhoanTuBang) {
+    const [ten_tai_khoan, setTenTaiKhoan] = useState(taiKhoanTuBang.taiKhoan.ten_tai_khoan);
+    const [mat_khau, setMatKhau] = useState(taiKhoanTuBang.taiKhoan.mat_khau);
+    const [vai_tro, setVaiTro] = useState(taiKhoanTuBang.taiKhoan.vai_tro);
+    const [disabledInput, setDisabledInput] = useState(false);
+
+    useEffect(async () => {
+      try {
+
+        setTenTaiKhoan(taiKhoanTuBang.taiKhoan.ten_tai_khoan);
+        setMatKhau(taiKhoanTuBang.taiKhoan.mat_khau);
+        setVaiTro(taiKhoanTuBang.taiKhoan.vai_tro);
+        if (taiKhoanTuBang.typeAction === "xem_chi_tiet") {
+          setDisabledInput(true);
+        } else {
+          setDisabledInput(false);
+        }
+      } catch (error) {}
+    }, [taiKhoanTuBang]);
     async function ThemTaiKhoan() {
-      let newroom = {
+      let newTaiKhoan = {
         ten_tai_khoan,
         mat_khau,
         vai_tro,
@@ -138,10 +203,10 @@ export default function QuanLyTaiKhoan() {
         //   )
         // ).data;
         if (ten_tai_khoan === "" || mat_khau === "" || vai_tro === "") {
-          newroom = null;
+          newTaiKhoan = null;
         }
   
-        props.parentCallback(newroom);
+        taiKhoanTuBang.parentCallback(newTaiKhoan);
         setTenTaiKhoan("");
         setMatKhau("");
         setVaiTro("");
@@ -152,6 +217,9 @@ export default function QuanLyTaiKhoan() {
   
     return (
       <div className="row">
+        <label htmlFor="ten_tai_khoan" style={{ fontWeight: "bold" }}>
+        Tên tài khoản:
+      </label>
         <input
           value={ten_tai_khoan}
           onChange={(e) => {
@@ -161,6 +229,9 @@ export default function QuanLyTaiKhoan() {
           className="form-control my-1"
           placeholder="Tên tài khoản"
         />
+          <label htmlFor="mat_khau" style={{ fontWeight: "bold" }}>
+        Mật khẩu
+      </label>
         <input
           value={mat_khau}
           onChange={(e) => {
@@ -170,6 +241,9 @@ export default function QuanLyTaiKhoan() {
           className="form-control my-1"
           placeholder="Mật khẩu"
         />
+          <label htmlFor="vai_tro" style={{ fontWeight: "bold" }}>
+        Vai trò:
+      </label>
         <input
           value={vai_tro}
           onChange={(e) => {
