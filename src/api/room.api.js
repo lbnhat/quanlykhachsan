@@ -7,7 +7,7 @@ export const roomApi = {
     return http.get("/hotel/room/searchAll", config);
   },
   searchRoomById(config) {
-    return http.get("api/mock/hotel/room/search", config);
+    return http.get("api/phong/danh-sach-phong-trong", config);
   },
   deleteRoomById(id) {
     return http.delete(`/hotel/room/${id}`);

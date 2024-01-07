@@ -156,7 +156,7 @@ const RoomCardForManager = ({ room }) => {
               >
                 <Select placeholder="Hạng phòng">
                   <Select.Option value="1">Phòng VIP</Select.Option>
-                  <Select.Option value="2">Phòng thường</Select.Option>
+                  <Select.Option value="2">Phòng Thường</Select.Option>
                 </Select>
               </Form.Item>
 

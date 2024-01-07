@@ -5,9 +5,10 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { province } from "../../constant/province";
 import styles from "./style.module.scss";
+import LocalStorage from "../../constant/localStorage";
 const { Option, OptGroup } = Select;
 
-export default function Filter({ filters }) {
+export default function Filter({ filters, action }) {
   const _filters = {
     ...filters,
   };
@@ -24,12 +25,13 @@ export default function Filter({ filters }) {
     const _filters = {
       checkin_date: _val.date[0],
       checkout_date: _val.date[1],
-      province_id: _val.province_id,
-      type_room_id: _val.type_room_id,
-      bed_quantity: _val.bed_quantity,
-      page: 1,
+      // province_id: _val.province_id,
+      hang_phong: _val.hang_phong,
+      loai_phong: _val.loai_phong,
     };
-    history.push(`hotel?${qs.stringify(_filters)}`);
+    localStorage.setItem(LocalStorage.filters, JSON.stringify(_filters));
+    //history.push(`/hotel/search/?${qs.stringify(_filters)}`);
+    action(_filters);
   };
   const onFinishFailed = (errorInfo) => {
     toast.error("Vui lòng nhập thông tin");
@@ -61,19 +63,19 @@ export default function Filter({ filters }) {
             <Form.Item name="date" label="Ngày đến/ Ngày đi">
               <DatePicker.RangePicker format="YYYY-MM-DD" />
             </Form.Item>
-            <Form.Item name="type_room_id" label="Hạng phòng">
+            <Form.Item name="hang_phong" label="Hạng phòng">
               <Select placeholder="Hạng phòng">
                 <OptGroup label="Hạng phòng">
-                  <Select.Option value="1">Phòng Vip</Select.Option>
-                  <Select.Option value="2">Phòng thường</Select.Option>
+                  <Select.Option value="VIP">Phòng Vip</Select.Option>
+                  <Select.Option value="Thường">Phòng Thường</Select.Option>
                 </OptGroup>
               </Select>
             </Form.Item>
-            <Form.Item name="bed_quantity" label="Loại phòng">
+            <Form.Item name="loai_phong" label="Loại phòng">
               <Select placeholder="Loại phòng">
                 <OptGroup label="Loại phòng">
-                  <Select.Option value="1">Đơn</Select.Option>
-                  <Select.Option value="2">Đôi</Select.Option>
+                  <Select.Option value="Đơn">Đơn</Select.Option>
+                  <Select.Option value="Đôi">Đôi</Select.Option>
                 </OptGroup>
               </Select>
             </Form.Item>

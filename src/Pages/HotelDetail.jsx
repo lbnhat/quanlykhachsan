@@ -12,32 +12,16 @@ import { searchRoomById } from "../slices/room.slice";
 import Filter from "../components/Filter/Filter";
 import styles from "../components/Filter/style.module.scss";
 import { formatMoney } from "../utils/helper";
+import { Link } from "react-router-dom";
 const HotelDetail = () => {
   const [roomFiltered, setRoomFiltered] = useState();
   const { id } = useParams();
   const filters = JSON.parse(localStorage.getItem(LocalStorage.filters));
   const dispatch = useDispatch();
-  const { province_id, ...searchRoom } = filters;
-  const [data_chon, setDataChon] = useState([
-    {
-      title: "Phòng số 1 - Tầng 1",
-      price: 10000,
-    },
-    {
-      title: "Phòng số 3 - Tầng 2",
-      price: 20000,
-    },
-    {
-      title: "Phòng số 4 - Tầng 1",
-      price: 30000,
-    },
-    {
-      title: "Phòng số 5 - Tầng 1",
-      price: 40000,
-    },
-  ]);
+  const { ...searchRoom } = filters;
+  const [data_chon, setDataChon] = useState([]);
   const [tong_gia, setTongGia] = useState(
-    data_chon.reduce((sum, room) => sum + room.price, 0)
+    data_chon.reduce((sum, room) => sum + Number(room.gia_phong), 0)
   );
   const params = {
     ...searchRoom,
@@ -48,35 +32,89 @@ const HotelDetail = () => {
       const _data = await dispatch(searchRoomById({ params }));
       const res = unwrapResult(_data);
 
-      setRoomFiltered(res.data);
+      const checkout = JSON.parse(localStorage.getItem(LocalStorage.checkout));
+      let _checkout = [];
+      if (checkout != null) {
+        _checkout = [...checkout];
+      }
+      const combinedData = res.data.map((item) => {
+        const foundItem = _checkout.find(
+          (room) => room.id_phong === item.id_phong
+        );
+        return {
+          ...item,
+          trang_thai: foundItem ? true : false,
+        };
+      });
+      setRoomFiltered(combinedData);
+      console.log(combinedData);
+      setDataChon(_checkout);
+      setTongGia(
+        _checkout.reduce((sum, room) => sum + Number(room.gia_phong), 0)
+      );
     };
     _getRoom();
   }, []);
-  // const data_chon = [
-  //   {
-  //     title: "Phòng số 1 - Tầng 1",
-  //     price: 10000,
-  //   },
-  //   {
-  //     title: "Phòng số 3 - Tầng 2",
-  //     price: 20000,
-  //   },
-  //   {
-  //     title: "Phòng số 4 - Tầng 1",
-  //     price: 30000,
-  //   },
-  //   {
-  //     title: "Phòng số 5 - Tầng 1",
-  //     price: 40000,
-  //   },
-  // ];
+  const actionChon = (value) => {
+    console.log(value);
+    // Implement your logic to delete the item at the specified index
+    const combinedData = roomFiltered.map((item) => {
+      const foundItem = value.find((room) => room.id_phong === item.id_phong);
+      return {
+        ...item,
+        trang_thai: foundItem ? true : false,
+      };
+    });
+    setRoomFiltered(combinedData);
+    setDataChon(value);
+    setTongGia(value.reduce((sum, room) => sum + Number(room.gia_phong), 0));
+  };
   const onDelete = (index) => {
     // Implement your logic to delete the item at the specified index
     const newData = [...data_chon];
     newData.splice(index, 1);
     setDataChon(newData);
-    setTongGia(newData.reduce((sum, room) => sum + room.price, 0));
+    setTongGia(newData.reduce((sum, room) => sum + Number(room.gia_phong), 0));
+    localStorage.setItem(LocalStorage.checkout, JSON.stringify(newData));
+    const combinedData = roomFiltered.map((item) => {
+      const foundItem = newData.find((room) => room.id_phong === item.id_phong);
+      return {
+        ...item,
+        trang_thai: foundItem ? true : false,
+      };
+    });
+    setRoomFiltered(combinedData);
   };
+
+  const actionFilter = (value) => {
+    const params = {
+      ...value,
+    };
+      const _getRoom = async () => {
+        const _data = await dispatch(searchRoomById({ params }));
+        const res = unwrapResult(_data);
+        let data = [...res.data||[]]
+        const checkout = JSON.parse(localStorage.getItem(LocalStorage.checkout));
+        let _checkout = [];
+        if (checkout != null) {
+          _checkout = [...checkout];
+        }
+        const combinedData = data.map((item) => {
+          const foundItem = _checkout.find(
+            (room) => room.id_phong === item.id_phong
+          );
+          return {
+            ...item,
+            trang_thai: foundItem ? true : false,
+          };
+        });
+        setRoomFiltered(combinedData);
+        console.log("combinedData");
+        console.log(combinedData);
+      };
+      _getRoom();
+  };
+  console.log(tong_gia);
   return (
     <HomeLayout>
       <Content className="max-w-6xl h-screen mx-auto mt-5">
@@ -85,50 +123,72 @@ const HotelDetail = () => {
             <Typography.Title level={1}>Danh sách các phòng</Typography.Title>
             {roomFiltered?.[0] &&
               roomFiltered.map((room) => (
-                <RoomCardItem key={room.id} room={room} />
+                <RoomCardItem
+                  key={room.id_phong}
+                  room={room}
+                  actionChon={actionChon}
+                />
               ))}
           </Col>
           <Col span={6}>
-            <Filter />
+            <Filter action={actionFilter} />
             <div className={styles.filterWrapper} style={{ marginTop: "10px" }}>
               <div className="py-3 flex items-center justify-between text-lg">
                 <span className="text-xl">Danh sách chọn </span>
               </div>
               <br></br>
-              <List
-                itemLayout="horizontal"
-                dataSource={data_chon}
-                actions={[
-                  <Button onClick={() => onDelete()} key="list-loadmore-delete">
-                    Xóa
-                  </Button>,
-                ]}
-                renderItem={(item, index) => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar
-                          src={`https://bizweb.dktcdn.net/100/153/764/products/giuong-ngu-hien-dai-72t.jpg?v=1691638130990`}
-                        />
-                      }
-                      title={item.title}
-                      description={<b>{formatMoney(item.price)} vnđ</b>}
-                    />
-                    <div>
-                      <Button size="small" onClick={() => onDelete(index)}>
-                        Xóa
-                      </Button>
-                    </div>
-                  </List.Item>
-                )}
-              />
+              {data_chon ? (
+                <List
+                  itemLayout="horizontal"
+                  dataSource={data_chon}
+                  actions={[
+                    <Button
+                      onClick={() => onDelete()}
+                      key="list-loadmore-delete"
+                    >
+                      Xóa
+                    </Button>,
+                  ]}
+                  renderItem={(item, index) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={
+                          <Avatar
+                            src={`https://bizweb.dktcdn.net/100/153/764/products/giuong-ngu-hien-dai-72t.jpg?v=1691638130990`}
+                          />
+                        }
+                        // title={item.title}
+                        title={
+                          <div>
+                            Phòng : {item.so_phong} - Tầng: {item.so_tang}
+                          </div>
+                        }
+                        description={<b>{formatMoney(item.gia_phong)} vnđ</b>}
+                      />
+                      <div>
+                        <Button size="small" onClick={() => onDelete(index)}>
+                          Xóa
+                        </Button>
+                      </div>
+                    </List.Item>
+                  )}
+                />
+              ) : (
+                <br></br>
+              )}
+
               <div>-------------------------------------</div>
               <div>
                 <b>Tổng tiền: {formatMoney(tong_gia)} vnđ</b>
               </div>
-              <Button type="primary" className="my-8 h-10" htmlType="submit">
+              {/* <Button type="primary" className="my-8 h-10" htmlType="submit">
                 Đi đến đặt phòng
-              </Button>
+              </Button> */}
+              <Link to={`/booking`}>
+                <Button type="primary" className="my-8 h-10" htmlType="submit">
+                  Đi đến đặt phòng
+                </Button>
+              </Link>
             </div>
           </Col>
         </Row>

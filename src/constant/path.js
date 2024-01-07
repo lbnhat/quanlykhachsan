@@ -6,6 +6,7 @@ class Path {
     this.login = "/login";
     this.hotelDetail = "/hotel/:id";
     this.bookingDetail = "/booking/:id";
+    this.booking = "/booking";
     this.registerMember = "/register-member";
     this.user = "/user";
     this.changePass = this.user + "/password";

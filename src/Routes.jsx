@@ -29,12 +29,12 @@ const Routes = () => {
         <HomePage />
       </Route>
       <Route path={path.searchHotel}>
-        <SearchPage />
+        <HotelDetail />
       </Route>
       <Route path={path.hotelDetail}>
         <HotelDetail />
       </Route>
-      <Route path={path.bookingDetail}>
+      <Route path={path.booking}>
       <Booking />
         {/* <AuthenticatedGuard>
           <Booking />

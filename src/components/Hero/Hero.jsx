@@ -4,12 +4,20 @@ import { province } from "../../constant/province";
 import { useHistory } from "react-router-dom";
 import styles from "./styles.module.scss";
 import { toast } from "react-toastify";
+import LocalStorage from "../../constant/localStorage";
 const { Option, OptGroup } = Select;
 
 const Hero = () => {
+  const [form] = Form.useForm();
+  form.setFieldsValue({
+    loai_phong: 'all',
+    hang_phong: 'all',
+  });
   const provinceData = province;
   const history = useHistory();
   const onFinish = async (values) => {
+    console.log("values")
+    console.log(values)
     const rangeValue = values["date"];
     const _val = {
       ...values,
@@ -21,15 +29,16 @@ const Hero = () => {
     const _filters = {
       checkin_date: _val.date[0],
       checkout_date: _val.date[1],
-      province_id: _val.province_id,
-      type_room_id: _val.type_room_id,
-      bed_quantity: _val.bed_quantity,
-      page: 1,
+      hang_phong: _val.hang_phong,
+      loai_phong: _val.loai_phong,
     };
-    history.push(`/hotel/1/?${qs.stringify(_filters)}`);
+    localStorage.setItem(LocalStorage.filters, JSON.stringify(_filters));
+    history.push(`/hotel/search/?${qs.stringify(_filters)}`);
   };
 
   const onFinishFailed = (errorInfo) => {
+    console.log("errorInfo")
+    console.log(errorInfo)
     toast.error("Vui lòng nhập thông tin");
   };
   return (
@@ -42,6 +51,7 @@ const Hero = () => {
       </div>
       <div className="flex justify-center">
         <Form
+        form={form}
           name="basic"
           className={styles.form}
           initialValues={{
@@ -88,13 +98,15 @@ const Hero = () => {
                 required: true,
               },
             ]}
-            name="type_room_id"
+            name="hang_phong"
             label="Hạng phòng"
+            defaultValue="all"
           >
-            <Select placeholder="Hạng phòng" style={{ width: "180px" }}>
+            <Select placeholder="Hạng phòng"  style={{ width: "180px" }}>
               <OptGroup label="Hạng phòng">
-                <Select.Option value="1">Phòng Vip</Select.Option>
-                <Select.Option value="2">Phòng thường</Select.Option>
+                <Select.Option value="VIP">Phòng Vip</Select.Option>
+                <Select.Option value="Thường">Phòng Thường</Select.Option>
+                <Select.Option value="all">Tất cả</Select.Option>
               </OptGroup>
             </Select>
           </Form.Item>
@@ -105,13 +117,15 @@ const Hero = () => {
                 required: true,
               },
             ]}
-            name="bed_quantity"
+            name="loai_phong"
             label="Loại phòng"
+            defaultValue="all"
           >
-            <Select placeholder="Loại phòng" style={{ width: "180px" }}>
+            <Select placeholder="Loại phòng"  style={{ width: "180px" }}>
               <OptGroup label="Loại phòng">
-                <Select.Option value="1">Đơn</Select.Option>
-                <Select.Option value="2">Đôi</Select.Option>
+                <Select.Option value="Đơn">Đơn</Select.Option>
+                <Select.Option value="Đôi">Đôi</Select.Option>
+                <Select.Option value="all">Tất cả</Select.Option>
               </OptGroup>
             </Select>
           </Form.Item>

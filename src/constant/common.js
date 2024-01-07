@@ -8,11 +8,11 @@ export const role = Object.freeze({
 });
 
 export const typeOfRoom = Object.freeze({
-  1: {
+  "VIP": {
     label: "Phòng VIP",
     color: "gold",
   },
-  2: {
+  "Thường": {
     label: "Phòng Thường",
     color: "#8D8DAA",
   },
