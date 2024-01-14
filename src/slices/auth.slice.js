@@ -49,8 +49,8 @@ const auth = createSlice({
   initialState: {
     profile:
       {
-        // hotel: JSON.parse(localStorage.getItem(LocalStorage.hotel)),
-        // user: JSON.parse(localStorage.getItem(LocalStorage.user)),
+        //hotel: JSON.parse(localStorage.getItem(LocalStorage.hotel)),
+        user: JSON.parse(localStorage.getItem(LocalStorage.user)),
       } || {},
   },
   reducers: {

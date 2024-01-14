@@ -64,7 +64,7 @@ const Navbar = () => {
       <div className="flex items-center">
         {authenticated && (
           <>
-            {profile.user.roleId !== 2 ? (
+            {/* {profile.user.roleId !== 2 ? (
               <Link to={path.registerMember}>
                 <Button
                   type="primary"
@@ -74,7 +74,7 @@ const Navbar = () => {
                   Đăng ký thành viên
                 </Button>
               </Link>
-            ) : null}
+            ) : null} */}
 
             <div className="flex items-center">
               <Dropdown overlay={DropDownList({ roleId })} trigger={["click"]}>

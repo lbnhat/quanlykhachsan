@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import {
   DatePicker,
-  InputNumber,
   Button,
   message,
   Row,
@@ -9,7 +8,6 @@ import {
   Radio,
   Space,
   Table,
-  Image,
 } from "antd";
 import axios from "axios";
 import "antd/dist/antd.css";
@@ -52,7 +50,7 @@ export default function QuanLyDatPhong() {
 
       const data = await (
         await axios.get(
-          "http://localhost:8888/api/phieu-dat-phong"
+          "http://localhost:8888/api/dat-phong"
         )
       ).data.data;
 

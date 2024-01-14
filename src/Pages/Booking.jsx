@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { Button, Col, DatePicker, Form, Input, Row, List, Avatar } from "antd";
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  Row,
+  List,
+  Avatar,
+  InputNumber,
+} from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,14 +22,15 @@ import Filter from "../components/Filter/Filter";
 import LocalStorage from "../constant/localStorage";
 import { rules } from "../constant/rules";
 import HomeLayout from "../core/layout/HomeLayout";
-import { booking } from "../slices/booking.slice";
+import { booking, getDichVu } from "../slices/booking.slice";
 import styles from "../styles/pages/login.module.scss";
 import { formatMoney } from "../utils/helper";
 
 const Booking = () => {
   const { id } = useParams();
   const { user } = useSelector((state) => state.auth.profile);
-  //const user_id = user.id;
+  const [dichVu, setDichVu] = useState([]);
+  const user_id = user.id;
   const { checkin_date, checkout_date } = JSON.parse(
     localStorage.getItem(LocalStorage.filters)
   );
@@ -27,7 +38,7 @@ const Booking = () => {
     JSON.parse(localStorage.getItem(LocalStorage.checkout))
   );
   const [tong_gia, setTongGia] = useState();
-
+  const [dataDichVu, setDataDichVu] = useState([]);
   useEffect(() => {
     const _getRoom = async () => {
       const checkout = JSON.parse(localStorage.getItem(LocalStorage.checkout));
@@ -40,18 +51,30 @@ const Booking = () => {
       );
     };
     _getRoom();
+    const _getDichVu = async () => {
+      try {
+        const _data = await dispatch(getDichVu());
+        const res = unwrapResult(_data);
+        setDichVu(res.data.data);
+      } catch (error) {}
+    };
+    _getDichVu();
   }, []);
   const history = useHistory();
   const dispatch = useDispatch();
   const onFinish = async (values) => {
-    const birthday = values["birthday"];
+    console.log(values);
+    //const birthday = values["birthday"];
     const _val = {
       ...values,
-      birthday: birthday.format("YYYY-MM-DD"),
+      // birthday: birthday.format("YYYY-MM-DD"),
       checkinDate: checkin_date,
       checkoutDate: checkout_date,
-      //user_id,
-      room_id: Number(id),
+      danh_sach_phong: data_chon,
+      tong_tien: tong_gia,
+      user_id,
+      danh_sach_dich_vu:dichVu,
+      //room_id: Number(id),
     };
     try {
       const res = await dispatch(booking(_val));
@@ -74,6 +97,21 @@ const Booking = () => {
     setTongGia(newData.reduce((sum, room) => sum + Number(room.gia_phong), 0));
     localStorage.setItem(LocalStorage.checkout, JSON.stringify(newData));
   };
+  const handleInputChange = (id, inputName, value ) => {
+    setDichVu((prevDichVu) =>
+      prevDichVu.map((item) =>
+        item.id_dich_vu === id ? { ...item, [inputName]: value } : item
+      )
+    );
+
+  };
+
+  const handleBlur = (id, inputName, value) => {
+    setTongGia(data_chon.reduce((sum, room) => sum + Number(room.gia_phong), 0));
+    let gia_cuoi =data_chon.reduce((sum, room) => sum + Number(room.gia_phong), 0)
+    gia_cuoi=gia_cuoi+dichVu.reduce((sum, room) => sum + Number(room.gia_dich_vu)*Number(room.so_luong), 0)
+    setTongGia(gia_cuoi);
+  };
 
   return (
     <HomeLayout>
@@ -84,9 +122,18 @@ const Booking = () => {
               {/* <div className={`${styles.formRegisterMemberContainer} flex-col`}> */}
               <div className="mx-auto mt-5">
                 <h1 className="text-3xl font-bold mt-12">
-                  Hoàn tất thông tin để đặt phòng
+                  Thông tin đặt phòng:
                 </h1>
-
+                <br />
+                <div>
+                  <div>
+                    <strong>Ngày đến:</strong> {checkin_date}
+                  </div>
+                  <div>
+                    <strong>Ngày trả phòng:</strong> {checkout_date}
+                  </div>
+                </div>
+                <br />
                 <List
                   itemLayout="horizontal"
                   dataSource={data_chon}
@@ -122,9 +169,51 @@ const Booking = () => {
                     </List.Item>
                   )}
                 />
-
                 <div>
                   ---------------------------------------------------------------------------------------------------------------------------------------------------------
+                  <div>
+                    <strong>Dịch vụ:</strong>
+                  </div>
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={dichVu}
+                    actions={[
+                      <Button
+                        onClick={() => onDelete()}
+                        key="list-loadmore-delete"
+                      >
+                        Xóa
+                      </Button>,
+                    ]}
+                    renderItem={(item, index) => (
+                      <List.Item>
+                        <List.Item.Meta
+                          title={
+                            <div>
+                              <strong>{item.ten_dich_vu}</strong>
+                            </div>
+                          }
+                          description={
+                            <b>{formatMoney(item.gia_dich_vu)} vnđ</b>
+                          }
+                        />
+                        <div>
+                          <InputNumber
+                            placeholder="Số lượng"
+                            variant="borderless"
+                            value={item.so_luong || 0} 
+                            onChange={(value) => handleInputChange(item.id_dich_vu, 'so_luong', value)}
+                            style={{
+                              width: 200,
+                            }}
+                            onBlur={(e) =>
+                              handleBlur(item.id_dich_vu, 'input1', e.target.value, item.gia_dich_vu)
+                            }
+                          />
+                        </div>
+                      </List.Item>
+                    )}
+                  />
                 </div>
                 <div>
                   <b>Tổng tiền: {formatMoney(tong_gia)} vnđ</b>
@@ -139,77 +228,79 @@ const Booking = () => {
                   onFinishFailed={onFinishFailed}
                   autoComplete="off"
                 >
-                  <Form.Item>
-                    <div className={`${styles.formInputName} mt-3`}>
-                      {/* <Form.Item
-                        initialValue={id}
-                        label="Phòng"
-                        name="room_id"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Trường này không được bỏ trống",
-                          },
-                        ]}
-                        className="mr-4"
-                      >
-                        <Input disabled />
-                      </Form.Item> */}
-                      {/* <Form.Item
-                        label="Năm sinh"
-                        name="birthday"
-                        className="mr-4"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Trường này không được bỏ trống",
-                          },
-                        ]}
-                      >
-                        <DatePicker format="YYYY-MM-DD" />
-                      </Form.Item> */}
-                      <Form.Item
-                        label="Họ và tên"
-                        name="fullName"
-                        rules={rules.name}
-                        className="mr-6"
-                      >
-                        <Input />
-                      </Form.Item>
-                      <Form.Item
-                        label="Số điện thoại"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Trường này không được bỏ trống",
-                          },
-                        ]}
-                        name="phonenumber"
-                        className="mr-6"
-                      >
-                        <Input />
-                      </Form.Item>
-                    </div>
-                    <div className={`${styles.formInputName} mt-3`}>
-                      <Form.Item
-                        label="CCCD/CMND"
-                        name="cccd"
-                        rules={rules.name}
-                        className="mr-6"
-                      >
-                        <Input />
-                      </Form.Item>
-                      <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={rules.email}
-                        validateStatus="error"
-                        className="mr-6"
-                      >
-                        <Input />
-                      </Form.Item>
-                    </div>
-                  </Form.Item>
+                  {user_id === 0 ? (
+                    <Form.Item>
+                      <div className={`${styles.formInputName} mt-3`}>
+                        {/* <Form.Item
+                         initialValue={id}
+                         label="Phòng"
+                         name="room_id"
+                         rules={[
+                           {
+                             required: true,
+                             message: "Trường này không được bỏ trống",
+                           },
+                         ]}
+                         className="mr-4"
+                       >
+                         <Input disabled />
+                       </Form.Item> */}
+                        {/* <Form.Item
+                         label="Năm sinh"
+                         name="birthday"
+                         className="mr-4"
+                         rules={[
+                           {
+                             required: true,
+                             message: "Trường này không được bỏ trống",
+                           },
+                         ]}
+                       >
+                         <DatePicker format="YYYY-MM-DD" />
+                       </Form.Item> */}
+                        <Form.Item
+                          label="Họ và tên"
+                          name="ten_khach_hang"
+                          rules={rules.name}
+                          className="mr-6"
+                        >
+                          <Input />
+                        </Form.Item>
+                        <Form.Item
+                          label="Số điện thoại"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Trường này không được bỏ trống",
+                            },
+                          ]}
+                          name="sdt"
+                          className="mr-6"
+                        >
+                          <Input />
+                        </Form.Item>
+                      </div>
+                      <div className={`${styles.formInputName} mt-3`}>
+                        <Form.Item
+                          label="CCCD/CMND"
+                          name="cmnd"
+                          rules={rules.name}
+                          className="mr-6"
+                        >
+                          <Input />
+                        </Form.Item>
+                        <Form.Item
+                          label="Email"
+                          name="email"
+                          rules={rules.email}
+                          validateStatus="error"
+                          className="mr-6"
+                        >
+                          <Input />
+                        </Form.Item>
+                      </div>
+                    </Form.Item>
+                  ) : null}
 
                   <div className="flex justify-center my-10">
                     <Form.Item>

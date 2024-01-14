@@ -55,9 +55,9 @@ const RegisterMember = () => {
       <Content className="max-w-6xl mx-auto mt-5">
         <div className="w-full h-auto rounded-lg shadow-lg">
           <div className="px-24 py-5">
-            <div className="text-center flex items-center flex-col justify-center">
+            {/* <div className="text-center flex items-center flex-col justify-center">
               <h1 className="text-5xl font-bold mb-4">Đăng kí thành viên </h1>
-            </div>
+            </div> */}
             <div className={styles.formRegisterMemberContainer}>
               <Form
                 className={styles.formRegisterMember}
@@ -154,7 +154,7 @@ const RegisterMember = () => {
                 </Form.Item>
                 <div className="flex justify-center mt-10 mb-24">
                   <Form.Item>
-                    {progress === 100 ? (
+                    {/* {progress === 100 ? (
                       <Button type="primary" htmlType="submit">
                         Đăng kí thành viên
                       </Button>
@@ -162,7 +162,7 @@ const RegisterMember = () => {
                       <Button type="primary" htmlType="submit" disabled>
                         Đăng kí thành viên
                       </Button>
-                    )}
+                    )} */}
                   </Form.Item>
                 </div>
               </Form>

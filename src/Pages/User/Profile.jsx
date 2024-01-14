@@ -29,10 +29,10 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const onFinish = async (values) => {
-    const birthday = values["birthday"].format("YYYY-MM-DD");
+    const ngay_sinh = values["ngay_sinh"].format("YYYY-MM-DD");
     const _data = {
       ...values,
-      birthday: birthday,
+      ngay_sinh: ngay_sinh,
       image: banner.url || user.image,
       id: user.id,
     };
@@ -64,10 +64,10 @@ const Profile = () => {
           <Row>
             <Col sm={18}>
               <Form.Item
-                label="Tên tài khoản"
-                name="username"
-                initialValue={user?.username}
-                rules={rules.userName}
+                label="Tên đăng nhập"
+                name="ten_dang_nhap"
+                initialValue={user?.ten_dang_nhap}
+                rules={rules.ten_dang_nhap}
               >
                 <Input />
               </Form.Item>
@@ -120,7 +120,7 @@ const Profile = () => {
                     <Col sm={12}>
                       <Form.Item
                         label="Ngày sinh"
-                        name="birthday"
+                        name="ngay_sinh"
                         rules={[
                           {
                             required: true,
@@ -130,8 +130,8 @@ const Profile = () => {
                       >
                         <DatePicker
                           defaultValue={
-                            user.birthday &&
-                            moment(formatDate(user.birthday, "YYYY-MM-DD"))
+                            user.ngay_sinh &&
+                            moment(formatDate(user.ngay_sinh, "YYYY-MM-DD"))
                           }
                           format="YYYY-MM-DD"
                         />

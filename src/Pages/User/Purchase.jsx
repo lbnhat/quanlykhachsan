@@ -19,11 +19,15 @@ const Purchase = () => {
         const data = await dispatch(getPurchase({ params }));
         const res = unwrapResult(data);
         setPurchaseList(res.data);
+
       } catch (error) {}
     };
     _getPurchase();
   }, []);
-  console.log(purchaseList);
+  //console.log(purchaseList);
+  console.log("=======123=========")
+  console.log(purchaseList)
+  console.log("=======23=========")
   return (
     <User>
       <div className="px-8 bg-white min-h-screen rounded py-12">
@@ -31,28 +35,32 @@ const Purchase = () => {
           Đơn đã đặt
         </Typography.Title>
         <Row gutter={[24, 24]} className="bg-orange-200 p-4">
-          <Col sm={4}>
-            <Typography.Text className="font-bold">Khách sạn</Typography.Text>
+          <Col sm={2}>
+            <Typography.Text className="font-bold">Mã phiếu đặt</Typography.Text>
           </Col>
-          <Col sm={6}>
-            <Typography.Text className="font-bold">Địa chỉ</Typography.Text>
+          <Col sm={3}>
+            <Typography.Text className="font-bold">Số điện thoại</Typography.Text>
           </Col>
-          <Col sm={6}>
-            <Typography.Text className="font-bold">Phòng</Typography.Text>
+          <Col sm={8}>
+            <Typography.Text className="font-bold">Thông tin phòng</Typography.Text>
           </Col>
           <Col sm={5}>
             <Typography.Text className="font-bold">
               Ngày nhận/trả phòng
             </Typography.Text>
           </Col>
-
+          <Col sm={3}>
+            <Typography.Text className="font-bold">
+              Trạng thái
+            </Typography.Text>
+          </Col>
           <Col sm={3}>
             <Typography.Text className="font-bold">Giá (VNĐ)</Typography.Text>
           </Col>
         </Row>
-        {purchaseList.books?.[0] &&
-          purchaseList.books.map((purchase) => (
-            <PurchaseCard purchase={purchase} key={purchase.id} />
+        {purchaseList?.data?.[0] &&
+          purchaseList.data.map((purchase) => (
+            <PurchaseCard purchase={purchase} key={purchase.id_phieu_dat_phong} />
           ))}
       </div>
     </User>

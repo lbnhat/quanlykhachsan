@@ -2,10 +2,10 @@ import http from "../utils/http";
 
 const authApi = {
   register(data) {
-    return http.post("user/register", data);
+    return http.post("api/nhan-vien/dang-ki", data);
   },
   login(data) {
-    return http.post("api/nhan-vien/login", data);
+    return http.post("api/nhan-vien/dang-nhap", data);
   },
   registerMember(data) {
     return http.post("user/manager", data);

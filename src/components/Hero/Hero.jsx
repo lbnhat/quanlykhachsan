@@ -13,7 +13,7 @@ const Hero = () => {
     loai_phong: 'all',
     hang_phong: 'all',
   });
-  const provinceData = province;
+  //const provinceData = province;
   const history = useHistory();
   const onFinish = async (values) => {
     console.log("values")
@@ -33,6 +33,7 @@ const Hero = () => {
       loai_phong: _val.loai_phong,
     };
     localStorage.setItem(LocalStorage.filters, JSON.stringify(_filters));
+    localStorage.setItem(LocalStorage.checkout, JSON.stringify([]));
     history.push(`/hotel/search/?${qs.stringify(_filters)}`);
   };
 

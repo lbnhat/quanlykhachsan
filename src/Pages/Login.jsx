@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { rules } from "../constant/rules";
 import { login } from "../slices/auth.slice";
 import styles from "../styles/pages/login.module.scss";
+import { flatMap } from "lodash";
 const Login = ({ heading, role }) => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -15,7 +16,7 @@ const Login = ({ heading, role }) => {
     try {
       const res = await dispatch(login(values));
       unwrapResult(res);
-
+console.log(res.payload.data.roleId)
       if (res.payload.data.roleId === 0) history.push("/admin");
       else history.goBack();
     } catch (error) {

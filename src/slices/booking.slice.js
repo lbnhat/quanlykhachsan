@@ -22,3 +22,8 @@ export const getStats = createAsyncThunk(
   "booking/stats",
   payloadCreator(bookingApi.getRevenue)
 );
+
+export const getDichVu = createAsyncThunk(
+  "dich-vu",
+  payloadCreator(bookingApi.getDichVu)
+);

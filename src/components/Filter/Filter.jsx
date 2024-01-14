@@ -6,11 +6,21 @@ import { toast } from "react-toastify";
 import { province } from "../../constant/province";
 import styles from "./style.module.scss";
 import LocalStorage from "../../constant/localStorage";
+import moment from 'moment';
 const { Option, OptGroup } = Select;
 
 export default function Filter({ filters, action }) {
   const _filters = {
     ...filters,
+  };
+
+  console.log(filters)
+  const initialValues = {
+    // Gán giá trị mặc định cho các trường trong form
+    date: [moment(filters.checkin_date), moment(filters.checkout_date)],
+    //date: ["",""],
+    hang_phong: filters.hang_phong, // hoặc 'Thường' tùy thuộc vào giá trị bạn muốn
+    loai_phong: filters.loai_phong, // hoặc 'Đôi' tùy thuộc vào giá trị bạn muốn
   };
   const history = useHistory();
   const onFinish = async (values) => {
@@ -50,6 +60,7 @@ export default function Filter({ filters, action }) {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            initialValues={initialValues}
           >
             {/* <Form.Item name="province_id" label="Thành phố">
               <Select placeholder="Chọn tỉnh" style={{ width: "100%" }}>
@@ -61,13 +72,14 @@ export default function Filter({ filters, action }) {
               </Select>
             </Form.Item> */}
             <Form.Item name="date" label="Ngày đến/ Ngày đi">
-              <DatePicker.RangePicker format="YYYY-MM-DD" />
+              <DatePicker.RangePicker disabled format="YYYY-MM-DD" />
             </Form.Item>
             <Form.Item name="hang_phong" label="Hạng phòng">
               <Select placeholder="Hạng phòng">
                 <OptGroup label="Hạng phòng">
                   <Select.Option value="VIP">Phòng Vip</Select.Option>
                   <Select.Option value="Thường">Phòng Thường</Select.Option>
+                  <Select.Option value="all">Tất cả</Select.Option>
                 </OptGroup>
               </Select>
             </Form.Item>
@@ -76,6 +88,7 @@ export default function Filter({ filters, action }) {
                 <OptGroup label="Loại phòng">
                   <Select.Option value="Đơn">Đơn</Select.Option>
                   <Select.Option value="Đôi">Đôi</Select.Option>
+                  <Select.Option value="all">Tất cả</Select.Option>
                 </OptGroup>
               </Select>
             </Form.Item>

@@ -131,7 +131,7 @@ const HotelDetail = () => {
               ))}
           </Col>
           <Col span={6}>
-            <Filter action={actionFilter} />
+            <Filter action={actionFilter} filters={filters}/>
             <div className={styles.filterWrapper} style={{ marginTop: "10px" }}>
               <div className="py-3 flex items-center justify-between text-lg">
                 <span className="text-xl">Danh sách chọn </span>
