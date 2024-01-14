@@ -31,9 +31,10 @@ const Booking = () => {
   const { user } = useSelector((state) => state.auth.profile);
   const [dichVu, setDichVu] = useState([]);
   const user_id = user.id;
-  const { checkin_date, checkout_date } = JSON.parse(
+  const { checkin_date, checkout_date, so_ngay } = JSON.parse(
     localStorage.getItem(LocalStorage.filters)
   );
+
   const [data_chon, setDataChon] = useState(
     JSON.parse(localStorage.getItem(LocalStorage.checkout))
   );
@@ -47,7 +48,7 @@ const Booking = () => {
         _checkout = [...checkout];
       }
       setTongGia(
-        _checkout.reduce((sum, room) => sum + Number(room.gia_phong), 0)
+        _checkout.reduce((sum, room) => sum + Number(room.gia_phong)*so_ngay, 0)
       );
     };
     _getRoom();
@@ -94,7 +95,7 @@ const Booking = () => {
     const newData = [...data_chon];
     newData.splice(index, 1);
     setDataChon(newData);
-    setTongGia(newData.reduce((sum, room) => sum + Number(room.gia_phong), 0));
+    setTongGia(newData.reduce((sum, room) => sum + Number(room.gia_phong)*so_ngay, 0));
     localStorage.setItem(LocalStorage.checkout, JSON.stringify(newData));
   };
   const handleInputChange = (id, inputName, value ) => {
@@ -107,8 +108,8 @@ const Booking = () => {
   };
 
   const handleBlur = (id, inputName, value) => {
-    setTongGia(data_chon.reduce((sum, room) => sum + Number(room.gia_phong), 0));
-    let gia_cuoi =data_chon.reduce((sum, room) => sum + Number(room.gia_phong), 0)
+    setTongGia(data_chon.reduce((sum, room) => sum + Number(room.gia_phong)*so_ngay, 0));
+    let gia_cuoi =data_chon.reduce((sum, room) => sum + Number(room.gia_phong)*so_ngay, 0)
     gia_cuoi=gia_cuoi+dichVu.reduce((sum, room) => sum + Number(room.gia_dich_vu)*Number(room.so_luong), 0)
     setTongGia(gia_cuoi);
   };
@@ -159,7 +160,7 @@ const Booking = () => {
                             Phòng : {item.so_phong} - Tầng: {item.so_tang}
                           </div>
                         }
-                        description={<b>{formatMoney(item.gia_phong)} vnđ</b>}
+                        description={<b>{formatMoney(item.gia_phong*so_ngay)} vnđ/{so_ngay} ngày</b>}
                       />
                       <div>
                         <Button size="small" onClick={() => onDelete(index)}>

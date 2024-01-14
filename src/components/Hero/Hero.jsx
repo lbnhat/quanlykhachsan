@@ -26,11 +26,16 @@ const Hero = () => {
         rangeValue[1].format("YYYY-MM-DD"),
       ],
     };
+    const startDate = new Date( _val.date[0]);
+    const endDate = new Date( _val.date[1]);
+    const timeDifference = endDate.getTime() - startDate.getTime();
+    const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
     const _filters = {
       checkin_date: _val.date[0],
       checkout_date: _val.date[1],
       hang_phong: _val.hang_phong,
       loai_phong: _val.loai_phong,
+      so_ngay:daysDifference,
     };
     localStorage.setItem(LocalStorage.filters, JSON.stringify(_filters));
     localStorage.setItem(LocalStorage.checkout, JSON.stringify([]));

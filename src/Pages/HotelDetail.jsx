@@ -23,6 +23,7 @@ const HotelDetail = () => {
   const [tong_gia, setTongGia] = useState(
     data_chon.reduce((sum, room) => sum + Number(room.gia_phong), 0)
   );
+  const soNgay = filters.so_ngay;
   const params = {
     ...searchRoom,
     hotel_id: id,
@@ -50,7 +51,7 @@ const HotelDetail = () => {
       console.log(combinedData);
       setDataChon(_checkout);
       setTongGia(
-        _checkout.reduce((sum, room) => sum + Number(room.gia_phong), 0)
+        _checkout.reduce((sum, room) => sum + Number(room.gia_phong)*soNgay, 0)
       );
     };
     _getRoom();
@@ -67,14 +68,14 @@ const HotelDetail = () => {
     });
     setRoomFiltered(combinedData);
     setDataChon(value);
-    setTongGia(value.reduce((sum, room) => sum + Number(room.gia_phong), 0));
+    setTongGia(value.reduce((sum, room) => sum + Number(room.gia_phong)*soNgay, 0));
   };
   const onDelete = (index) => {
     // Implement your logic to delete the item at the specified index
     const newData = [...data_chon];
     newData.splice(index, 1);
     setDataChon(newData);
-    setTongGia(newData.reduce((sum, room) => sum + Number(room.gia_phong), 0));
+    setTongGia(newData.reduce((sum, room) => sum + Number(room.gia_phong)*soNgay, 0));
     localStorage.setItem(LocalStorage.checkout, JSON.stringify(newData));
     const combinedData = roomFiltered.map((item) => {
       const foundItem = newData.find((room) => room.id_phong === item.id_phong);
@@ -90,29 +91,29 @@ const HotelDetail = () => {
     const params = {
       ...value,
     };
-      const _getRoom = async () => {
-        const _data = await dispatch(searchRoomById({ params }));
-        const res = unwrapResult(_data);
-        let data = [...res.data||[]]
-        const checkout = JSON.parse(localStorage.getItem(LocalStorage.checkout));
-        let _checkout = [];
-        if (checkout != null) {
-          _checkout = [...checkout];
-        }
-        const combinedData = data.map((item) => {
-          const foundItem = _checkout.find(
-            (room) => room.id_phong === item.id_phong
-          );
-          return {
-            ...item,
-            trang_thai: foundItem ? true : false,
-          };
-        });
-        setRoomFiltered(combinedData);
-        console.log("combinedData");
-        console.log(combinedData);
-      };
-      _getRoom();
+    const _getRoom = async () => {
+      const _data = await dispatch(searchRoomById({ params }));
+      const res = unwrapResult(_data);
+      let data = [...(res.data || [])];
+      const checkout = JSON.parse(localStorage.getItem(LocalStorage.checkout));
+      let _checkout = [];
+      if (checkout != null) {
+        _checkout = [...checkout];
+      }
+      const combinedData = data.map((item) => {
+        const foundItem = _checkout.find(
+          (room) => room.id_phong === item.id_phong
+        );
+        return {
+          ...item,
+          trang_thai: foundItem ? true : false,
+        };
+      });
+      setRoomFiltered(combinedData);
+      console.log("combinedData");
+      console.log(combinedData);
+    };
+    _getRoom();
   };
   console.log(tong_gia);
   return (
@@ -131,7 +132,7 @@ const HotelDetail = () => {
               ))}
           </Col>
           <Col span={6}>
-            <Filter action={actionFilter} filters={filters}/>
+            <Filter action={actionFilter} filters={filters} />
             <div className={styles.filterWrapper} style={{ marginTop: "10px" }}>
               <div className="py-3 flex items-center justify-between text-lg">
                 <span className="text-xl">Danh sách chọn </span>
@@ -163,7 +164,7 @@ const HotelDetail = () => {
                             Phòng : {item.so_phong} - Tầng: {item.so_tang}
                           </div>
                         }
-                        description={<b>{formatMoney(item.gia_phong)} vnđ</b>}
+                        description={<b>{formatMoney(item.gia_phong*soNgay)} vnđ/{soNgay}ngày</b>}
                       />
                       <div>
                         <Button size="small" onClick={() => onDelete(index)}>

@@ -22,13 +22,17 @@ const SearchPage = () => {
       ...query,
       page: query.page || currPage,
     };
-
+    const startDate = new Date(_filters.checkin_date);
+    const endDate = new Date(_filters.checkout_date);
+    const timeDifference = endDate.getTime() - startDate.getTime();
+    const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
     const params = {
       checkin_date: _filters.checkin_date,
       checkout_date: _filters.checkout_date,
       province_id: _filters.province_id,
       type_room_id: _filters.type_room_id,
       bed_quantity: _filters.bed_quantity,
+      so_ngay:daysDifference,
       page: currPage,
     };
     setFilters(params);
@@ -39,10 +43,7 @@ const SearchPage = () => {
     };
     _getHotels();
   }, [query, dispatch, currPage]);
-  localStorage.setItem(LocalStorage.filters, JSON.stringify(filters));
-  console.log("hotelList");
-  console.log(hotelList);
-  console.log("hotelList");  
+  localStorage.setItem(LocalStorage.filters, JSON.stringify(filters)); 
   const onShowSizeChange = (curr) => {
     setCurrPage(curr);
   };
