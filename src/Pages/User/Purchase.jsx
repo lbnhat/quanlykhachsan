@@ -9,6 +9,7 @@ const Purchase = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth.profile);
   const [purchaseList, setPurchaseList] = useState([]);
+  const [isCapNhat, setIsCapNhat] = useState(true);
   useEffect(() => {
     const _getPurchase = async () => {
       const params = {
@@ -23,28 +24,32 @@ const Purchase = () => {
       } catch (error) {}
     };
     _getPurchase();
-  }, []);
+  }, [isCapNhat]);
+
+  const capNhat=((e)=>{
+    setIsCapNhat(e)
+  });
   //console.log(purchaseList);
-  console.log("=======123=========")
-  console.log(purchaseList)
-  console.log("=======23=========")
   return (
     <User>
       <div className="px-8 bg-white min-h-screen rounded py-12">
         <Typography.Title level={3} className="pt-5">
           Đơn đã đặt
         </Typography.Title>
-        <Row gutter={[24, 24]} className="bg-orange-200 p-4">
+        <Row gutter={[24, 24]} className="bg-orange-400 p-4">
           <Col sm={2}>
             <Typography.Text className="font-bold">Mã phiếu đặt</Typography.Text>
           </Col>
-          <Col sm={3}>
+          <Col sm={2}>
             <Typography.Text className="font-bold">Số điện thoại</Typography.Text>
           </Col>
-          <Col sm={8}>
+          <Col sm={6}>
             <Typography.Text className="font-bold">Thông tin phòng</Typography.Text>
           </Col>
-          <Col sm={5}>
+          <Col sm={4}>
+            <Typography.Text className="font-bold">Thông dịch vụ</Typography.Text>
+          </Col>
+          <Col sm={3}>
             <Typography.Text className="font-bold">
               Ngày nhận/trả phòng
             </Typography.Text>
@@ -54,13 +59,16 @@ const Purchase = () => {
               Trạng thái
             </Typography.Text>
           </Col>
-          <Col sm={3}>
+          <Col sm={2}>
             <Typography.Text className="font-bold">Giá (VNĐ)</Typography.Text>
+          </Col>
+          <Col sm={2}>
+            <Typography.Text className="font-bold"></Typography.Text>
           </Col>
         </Row>
         {purchaseList?.data?.[0] &&
           purchaseList.data.map((purchase) => (
-            <PurchaseCard purchase={purchase} key={purchase.id_phieu_dat_phong} />
+            <PurchaseCard purchase={purchase} key={purchase.id_phieu_dat_phong} capNhat={(e)=>capNhat(e)} isCapNhat={isCapNhat} />
           ))}
       </div>
     </User>

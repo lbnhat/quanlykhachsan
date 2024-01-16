@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Tabs, Space, Table, Button, Modal} from "antd";
-export default function QuanLyHoaDon() {
+import { Tabs, Space, Table, Button, Modal, Form, Input, Row, Col} from "antd";
+import { formatDate, formatMoney } from "../../utils/helper";
+export default function QuanLyHoaDon(activeTabKey) {
     const [users, setusers] = useState([]);
     const [loading, setloading] = useState(true);
     const [error, seterror] = useState();
@@ -70,7 +71,7 @@ export default function QuanLyHoaDon() {
         setloading(false);
         seterror(error);
       }
-    }, []);
+    }, [activeTabKey]);
 
     const showModal = (hoaDon, action) => {
       if (action === "xem_chi_tiet") {
@@ -124,12 +125,23 @@ export default function QuanLyHoaDon() {
       },
       {
         title: "Ngày tạo",
-        dataIndex: "ngay_tao",
+        dataIndex: "ngay_lap_phieu",
         key: "ngay_tao",
+        render: (ngay_lap_phieu) => (
+          <div>
+            <p>
+              {formatDate(ngay_lap_phieu)}
+            </p>
+            {/* <p>Thời gian : {
+           // thong_tin_phong&&thong_tin_phong.thoi_gian
+            Math.floor((thong_tin_phong&&thong_tin_phong?.[0].ngay_den.getTime()- thong_tin_phong&&thong_tin_phong?.[0].ngay_tra_phong..getTime())/ (1000 * 3600 * 24))
+            }</p> */}
+          </div>
+        ),
       },
       {
         title: "Khách hàng",
-        dataIndex: "khach_hang",
+        dataIndex: "ten_khach_hang",
         key: "khach_hang",
       },
       {
@@ -139,13 +151,23 @@ export default function QuanLyHoaDon() {
       },
       {
         title: "Người lập phiếu",
-        dataIndex: "nguoi_lap_phieu",
+        dataIndex: "ten_nhan_vien",
         key: "nguoi_lap_phieu",
       },
       {
         title: "Tổng tiền",
         dataIndex: "tong_tien",
         key: "tong_tien",
+        render: (tong_tien) => (
+          // const gia_phong = thong_tin_tong_tien&&thong_tin_tong_tien.gia_phong || 0;
+          // const gia_dich_vu = thong_tin_tong_tien&&thong_tin_tong_tien.gia_dich_vu || 0;
+          // const tong_tien = thong_tin_tong_tien&&thong_tin_tong_tien.tong_tien || 0;
+          <div>
+            {/* <p>Giá phòng: {gia_phong}</p>
+            <p>Giá dịch vụ : {gia_dich_vu}</p> */}
+            <p> {formatMoney(tong_tien)}vnđ</p>
+          </div>
+        ),
       },
       {
         title: "",
@@ -160,14 +182,14 @@ export default function QuanLyHoaDon() {
           >
             Xem chi tiết
           </Button>
-          <Button
+          {/* <Button
             type="primary"
             onClick={() => {
               showModal(hoadonTren1Dong, "chinh_sua");
             }}
           >
             Chỉnh sửa
-          </Button>
+          </Button> */}
         </Space>
         ),
       },
@@ -178,9 +200,9 @@ export default function QuanLyHoaDon() {
         <div className="col-md-10">
           <h2>Danh sách hóa đơn</h2>
           <>
-            <Button type="primary" onClick={showModal}>
+            {/* <Button type="primary" onClick={showModal}>
               Tạo hóa đơn
-              </Button>
+              </Button> */}
           <Modal
             title={titleModal}
             visible={isModalClose}
@@ -205,7 +227,8 @@ export default function QuanLyHoaDon() {
     const [nguoi_lap_phieu, setNguoiLapPhieu] = useState(hoaDonTuBang.hoaDon.nguoi_lap_phieu);
     const [tong_tien, setTongTien] = useState(hoaDonTuBang.hoaDon.tong_tien);
     const [disabledInput, setDisabledInput] = useState(false);
-  
+    const [form] = Form.useForm();
+   // const disabledInput = false;
     useEffect(async () => {
       try {
         setMaHoaDon(hoaDonTuBang.hoaDon.id_hoa_don);
@@ -267,88 +290,63 @@ export default function QuanLyHoaDon() {
         console.log(error);
       }
     }
-  
+
     return (
-      <div className="row">
-        <label htmlFor="id_hoa_don" style={{ fontWeight: "bold" }}>
-         Mã hóa đơn:
-        </label>
-        <input
-          value={id_hoa_don}
-          onChange={(e) => {
-            setMaHoaDon(e.target.value);
-          }}
-          type="text"
-          disabled={disabledInput}
-          className="form-control my-1"
-          placeholder="Nhập hóa đơn"
-        />
-        <label htmlFor="sdt" style={{ fontWeight: "bold" }}>
-          Số điện thoại:
-        </label>
-        <input
-          value={sdt}
-          onChange={(e) => {
-            setSoDienThoai(e.target.value);
-          }}
-          disabled={disabledInput}
-          type="text"
-          className="form-control my-1"
-          placeholder="Nhập số điện thoại"
-        />
-        <label htmlFor="khach_hang" style={{ fontWeight: "bold" }}>
-          Khách hàng:
-        </label>
-        <input
-          value={khach_hang}
-          onChange={(e) => {
-            setKhachHang(e.target.value);
-          }}
-          disabled={disabledInput}
-          type="text"
-          className="form-control my-1"
-          placeholder="Nhập khách hàng"
-        />
-        <label htmlFor="ngay_tao" style={{ fontWeight: "bold" }}>
-          Ngày tạo:
-        </label>
-        <input
-          value={ngay_tao}
-          onChange={(e) => {
-            setNgayTao(e.target.value);
-          }}
-          disabled={disabledInput}
-          type="text"
-          className="form-control my-1"
-          placeholder="Nhập ngày tạo"
-        />
-                <label htmlFor="nguoi_lap_phieu" style={{ fontWeight: "bold" }}>
-          Người lập phiếu:
-        </label>
-        <input
-          value={nguoi_lap_phieu}
-          onChange={(e) => {
-            setNguoiLapPhieu(e.target.value);
-          }}
-          disabled={disabledInput}
-          type="text"
-          className="form-control my-1"
-          placeholder="Nhập người lập phiếu"
-        />
-                <label htmlFor="tong_tien" style={{ fontWeight: "bold" }}>
-         Tổng tiền:
-        </label>
-        <input
-          value={tong_tien}
-          onChange={(e) => {
-            setTongTien(e.target.value);
-          }}
-          disabled={disabledInput}
-          type="text"
-          className="form-control my-1"
-          placeholder="Nhập tổng tiền"
-        />
-      </div>
+      <Form form={form} layout="vertical">
+      <Row gutter={16}>
+        <Col span={8}>
+          <Form.Item label="Mã hóa đơn" name="maHoaDon">
+            <Input
+              disabled={disabledInput}
+              placeholder="Nhập mã hóa đơn"
+            />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item label="Số điện thoại" name="soDienThoai">
+            <Input
+              disabled={disabledInput}
+              placeholder="Nhập số điện thoại"
+            />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item label="Khách hàng" name="khachHang">
+            <Input
+              disabled={disabledInput}
+              placeholder="Nhập khách hàng"
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={16}>
+        <Col span={8}>
+          <Form.Item label="Ngày tạo" name="ngayTao">
+            <Input
+              disabled={disabledInput}
+              placeholder="Nhập ngày tạo"
+            />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item label="Người lập phiếu" name="nguoiLapPhieu">
+            <Input
+              disabled={disabledInput}
+              placeholder="Nhập người lập phiếu"
+            />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item label="Tổng tiền" name="tongTien">
+            <Input
+              disabled={disabledInput}
+              placeholder="Nhập tổng tiền"
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+    </Form>
     );
   }
   

@@ -13,11 +13,11 @@ const User = ({ children }) => {
   const location = useLocation();
   return (
     <HomeLayout>
-      <Content className="max-w-6xl min-h-screen mx-auto mt-5">
+      <Content className="max-w-7xl min-h-screen mx-auto mt-5">
         <Row gutter={[16, 16]}>
           <Col sm={4} className="bg-white py-5 min-h-screen">
             <Avatar
-              className="border border-orange-500 ml-4"
+              className="border border-orange-700 ml-4"
               src={user.image}
               size={{ xl: 80 }}
             />

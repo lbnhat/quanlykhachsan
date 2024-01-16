@@ -8,25 +8,26 @@ import {
   Radio,
   Space,
   Table,
+  Typography,
+  Spin,
 } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import axios from "axios";
 import "antd/dist/antd.css";
 import locale from "antd/lib/date-picker/locale/vi_VN";
+import { formatDate, formatMoney } from "../../utils/helper";
 
 const { RangePicker } = DatePicker;
-export default function QuanLyDatPhong() {
+export default function QuanLyDatPhong({ activeTabKey }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [numberOfRooms, setNumberOfRooms] = useState(1);
-  const [trangthai, setTrangThai] = useState("cho_xac_nhan");
+  const [trangthai, setTrangThai] = useState("Đang chờ xác nhận");
   const [rooms, setRooms] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [fromdate, setfromdate] = useState();
   const [todate, settodate] = useState();
-  
 
   const handleDateChange = (dates, dateStrings) => {
-    console.log("Selected Dates:", dates);
-    console.log("Date Strings:", dateStrings);
     setSelectedDate(dates);
   };
 
@@ -46,15 +47,15 @@ export default function QuanLyDatPhong() {
 
   useEffect(async () => {
     try {
-      //setLoading(true);
-
+      setLoading(true);
+      console.log("Number of Rooms11111:", 1111);
       const data = await (
         await axios.get(
-          "http://localhost:8888/api/dat-phong"
+          "http://localhost:8888/api/dat-phong?trang_thai=" + trangthai
         )
       ).data.data;
 
-      console.log(data)
+      console.log(data);
 
       // let data = [
       //   {
@@ -118,21 +119,105 @@ export default function QuanLyDatPhong() {
       //     },
       //   },
       // ];
-      setRooms(data)
+      setRooms(data);
       setfromdate(data);
       settodate(false);
+      setLoading(false);
+    } catch (error) {
+      setfromdate(error);
+      settodate(false);
+    }
+  }, [activeTabKey]);
+  const callPhieu = async (trangThai) => {
+    try {
+      setLoading(true);
+
+      const data = await (
+        await axios.get(
+          "http://localhost:8888/api/dat-phong?trang_thai=" + trangThai
+        )
+      ).data.data;
+      setRooms(data);
+      setfromdate(data);
+      settodate(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
       setfromdate(error);
       settodate(false);
-      
     }
-  }, []);
-
-  const onChange = (e) => {
-    //console.log(`radio checked:${e.target.value}`);
-    setTrangThai(e.target.value);
   };
+  const capNhatPhieu = async (id_phieu_dat_phong,trangThai) => {
+    try {
+     // setLoading(true);
+      let req={
+        id_phieu_dat_phong:Number(id_phieu_dat_phong),
+        trang_thai:trangThai
+      }
+      const data = await (
+        await axios.post(
+          "http://localhost:8888/api/dat-phong/cap-nhat-trang-thai",
+          req
+        )
+      ).data.data;
+    } catch (error) {
+      console.log(error);
+      //message.error("Lỗi xác nhận thành công phiếu "+id_phieu_dat_phong);
+    }
+  };
+  const onChange = (e) => {
+    //setLoading(true);
+    console.log(`radio checked:${e.target.value}`);
+    setTrangThai(e.target.value);
+    callPhieu(e.target.value);
+    //setLoading(false);
+  };
+
+  // const xacNhanThanhToan = (e) => {
+  //   console.log(e.id_phieu_dat_phong);
+  //   capNhatPhieu(e.id_phieu_dat_phong,"Chưa thanh toán")
+  //   message.success("Xác nhận thành công phiếu "+e.id_phieu_dat_phong);
+  //   callPhieu(trangthai);
+  // };
+  const xacNhanChoThanhToan = async (e) => {
+    console.log(e.id_phieu_dat_phong);
+    
+    try {
+      await capNhatPhieu(e.id_phieu_dat_phong, "Chưa thanh toán"); // Waits for the promise to resolve
+      message.success("Xác nhận thành công phiếu " + e.id_phieu_dat_phong);
+      
+      callPhieu(trangthai); // Calls after capNhatPhieu has been resolved
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi cập nhật phiếu: ", error);
+    }
+  };
+
+  const xacNhanThanhToan = async (e) => {
+    console.log(e.id_phieu_dat_phong);
+    
+    try {
+      await capNhatPhieu(e.id_phieu_dat_phong, "Đã thanh toán"); // Waits for the promise to resolve
+      message.success("Thanh toán thành công phiếu " + e.id_phieu_dat_phong);
+      
+      callPhieu(trangthai); // Calls after capNhatPhieu has been resolved
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi cập nhật phiếu: ", error);
+    }
+  };
+
+  const huyPhieu = async (e) => {
+    console.log(e.id_phieu_dat_phong);
+    
+    try {
+      await capNhatPhieu(e.id_phieu_dat_phong, "Hủy"); // Waits for the promise to resolve
+      message.success("Hủy phiếu " + e.id_phieu_dat_phong);
+      
+      callPhieu(trangthai); // Calls after capNhatPhieu has been resolved
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi cập nhật phiếu: ", error);
+    }
+  };
+  
 
   const columns = (e) => [
     {
@@ -146,20 +231,29 @@ export default function QuanLyDatPhong() {
       key: "thong_tin_khach_hang",
       render: (thong_tin_khach_hang) => (
         <div>
-          <p>Tên: {thong_tin_khach_hang.ten_khach_hang}</p>
+          <p>Tên:{thong_tin_khach_hang.ten_khach_hang}</p>
           <p>Điện thoại: {thong_tin_khach_hang.sdt}</p>
         </div>
       ),
     },
     {
       title: "Thông tin đặt phòng",
-      dataIndex: "thong_tin_dat_phong",
+      dataIndex: "thong_tin_phong",
       key: "thong_tin_dat_phong",
-      render: (thong_tin_dat_phong) => (
+      render: (thong_tin_phong) => (
         <div>
-          <p>Ngày đến : {thong_tin_dat_phong&&thong_tin_dat_phong.ngay_den}</p>
-          <p>Ngày đi : {thong_tin_dat_phong&&thong_tin_dat_phong.ngay_di}</p>
-          <p>Thòi gian : {thong_tin_dat_phong&&thong_tin_dat_phong.thoi_gian}</p>
+          <p>
+            Ngày đến:
+            {formatDate(thong_tin_phong && thong_tin_phong?.[0].ngay_den)}
+          </p>
+          <p>
+            Ngày đi:
+            {formatDate(thong_tin_phong && thong_tin_phong?.[0].ngay_tra_phong)}
+          </p>
+          {/* <p>Thời gian : {
+         // thong_tin_phong&&thong_tin_phong.thoi_gian
+          Math.floor((thong_tin_phong&&thong_tin_phong?.[0].ngay_den.getTime()- thong_tin_phong&&thong_tin_phong?.[0].ngay_tra_phong..getTime())/ (1000 * 3600 * 24))
+          }</p> */}
         </div>
       ),
     },
@@ -169,13 +263,20 @@ export default function QuanLyDatPhong() {
       key: "thong_tin_phong",
       render: (thong_tin_phong) => (
         <div>
-          <p>Mã phòng: {thong_tin_phong&&thong_tin_phong.ma_phong}</p>
+          {/* <p>Mã phòng: {thong_tin_phong&&thong_tin_phong.ma_phong}</p>
           <p>
             Tầng : {thong_tin_phong&&thong_tin_phong.tang} - {thong_tin_phong&&thong_tin_phong.loai_phong} -{" "}
             {thong_tin_phong&&thong_tin_phong.hang_phong}
           </p>
           <p>Giá : {thong_tin_phong&&thong_tin_phong.gia}</p>
-          <p>Tổng giá : {thong_tin_phong&&thong_tin_phong.tong_gia}</p>
+          <p>Tổng giá : {thong_tin_phong&&thong_tin_phong.tong_gia}</p> */}
+          {thong_tin_phong?.[0] &&
+            thong_tin_phong.map((value) => (
+              <Typography.Text>
+                <b>Phòng :{value.so_phong} </b>- {value.ten_loai_phong} -{" "}
+                {value.hang_phong} - {formatMoney(value.gia)}vnđ<br></br>
+              </Typography.Text>
+            ))}
         </div>
       ),
     },
@@ -185,40 +286,47 @@ export default function QuanLyDatPhong() {
       key: "thong_tin_dich_vu",
       render: (thong_tin_dich_vu) => (
         <div>
-          <p>Tên dịch vụ: {thong_tin_dich_vu&&thong_tin_dich_vu.ten_dich_vu}</p>
+          {/* <p>Tên dịch vụ: {thong_tin_dich_vu&&thong_tin_dich_vu.ten_dich_vu}</p>
           <p>Số Lượng : {thong_tin_dich_vu&&thong_tin_dich_vu.so_luong}</p>
-          <p>Giá: {thong_tin_dich_vu&&thong_tin_dich_vu.gia}</p>
+          <p>Giá: {thong_tin_dich_vu&&thong_tin_dich_vu.gia}</p> */}
+          {thong_tin_dich_vu?.[0] &&
+            thong_tin_dich_vu.map((value) => (
+              <Typography.Text>
+                {value.ten_dich_vu}: x {value.so_luong} -{" "}
+                {formatMoney(value.gia_dich_vu)}vnđ<br></br>
+              </Typography.Text>
+            ))}
         </div>
       ),
     },
     {
       title: "Tổng tiền",
-      dataIndex: "thong_tin_tong_tien",
-      key: "thong_tin_tong_tien",
-      render: (thong_tin_tong_tien) => {
-        const gia_phong = thong_tin_tong_tien&&thong_tin_tong_tien.gia_phong || 0;
-        const gia_dich_vu = thong_tin_tong_tien&&thong_tin_tong_tien.gia_dich_vu || 0;
-        const tong_tien = thong_tin_tong_tien&&thong_tin_tong_tien.tong_tien || 0;
+      dataIndex: "tong_tien",
+      key: "tong_tien",
+      render: (tong_tien) => (
+        // const gia_phong = thong_tin_tong_tien&&thong_tin_tong_tien.gia_phong || 0;
+        // const gia_dich_vu = thong_tin_tong_tien&&thong_tin_tong_tien.gia_dich_vu || 0;
+        // const tong_tien = thong_tin_tong_tien&&thong_tin_tong_tien.tong_tien || 0;
         <div>
-          <p>Giá phòng: {gia_phong}</p>
-          <p>Giá dịch vụ : {gia_dich_vu}</p>
-          <p>Tổng tiền : {tong_tien}</p>
+          {/* <p>Giá phòng: {gia_phong}</p>
+          <p>Giá dịch vụ : {gia_dich_vu}</p> */}
+          <p> {formatMoney(tong_tien)}vnđ</p>
         </div>
-      }
+      ),
     },
     {
       title: "",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          {e === "cho_xac_nhan" && (
+          {e === "Đang chờ xác nhận" && (
             <>
               <Space size="middle">
                 <Button
                   type="primary"
-                  onClick={() => {
-                    message.success("Đặt thành công");
-                  }}
+                  onClick={(e) => 
+                    xacNhanChoThanhToan(record)   
+                }
                 >
                   Xác nhận đặt phòng
                 </Button>
@@ -231,16 +339,17 @@ export default function QuanLyDatPhong() {
                     borderColor: "#d9d9d9",
                     color: "rgba(0, 0, 0, 0.45)",
                   }}
-                  onClick={() => {
-                    message.warning("Hủy thành công");
-                  }}
+                  onClick={() => 
+                    huyPhieu(record)
+                   // message.warning("Hủy thành công");
+                  }
                 >
                   Hủy đặt phòng
                 </Button>
               </Space>
             </>
           )}
-          {e === "da_xac_nhan" && (
+          {e === "Chưa thanh toán" && (
             <>
               <Space size="middle">
                 <Button
@@ -251,7 +360,8 @@ export default function QuanLyDatPhong() {
                     color: "white",
                   }}
                   onClick={() => {
-                    message.success("Thanh toán thành công");
+                    xacNhanThanhToan(record)   
+                    // message.success("Thanh toán thành công");
                   }}
                 >
                   Xác nhận thanh toán
@@ -265,9 +375,10 @@ export default function QuanLyDatPhong() {
                     borderColor: "#d9d9d9",
                     color: "rgba(0, 0, 0, 0.45)",
                   }}
-                  onClick={() => {
-                    message.warning("Hủy thành công");
-                  }}
+                  onClick={() => 
+                    huyPhieu(record)
+                   // message.warning("Hủy thành công");
+                  }
                 >
                   Hủy đặt phòng
                 </Button>
@@ -285,37 +396,48 @@ export default function QuanLyDatPhong() {
         <Col span={12}>
           <Row gutter={24}>
             <Col span={12}>
-              <Radio.Group onChange={onChange} defaultValue="cho_xac_nhan">
-                <Radio.Button value="cho_xac_nhan">Chờ xác nhận</Radio.Button>
-                <Radio.Button value="da_xac_nhan">
+              <Radio.Group onChange={onChange} defaultValue="Đang chờ xác nhận">
+                <Radio.Button value="Đang chờ xác nhận">
+                  Chờ xác nhận
+                </Radio.Button>
+                <Radio.Button value="Chưa thanh toán">
                   Xác nhận thanh toán
                 </Radio.Button>
                 {/* <Radio.Button value="c">Đặt phòng</Radio.Button> */}
               </Radio.Group>
             </Col>
-            <Col span={6}>
+            {/* <Col span={6}>
               <RangePicker locale={locale} onChange={handleDateChange} />
             </Col>
             <Col span={1}>
               <Button type="primary" onClick={handleBookRoom}>
                 Tìm kiếm
               </Button>
-            </Col>
+            </Col> */}
           </Row>
           <br /> {/* Thêm dòng này để tạo khoảng cách */}
         </Col>
       </Row>
 
-      {/* {loading ? (
-        <h1 className="text-center my-60">
-          <Loader />
-        </h1>
-      ) : ( */}
+      {loading ? (
+         <div className="centered-spin">
+        <Spin
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 24,
+              }}
+              spin
+            />
+          }
+        />
+        </div>
+      ) : (
         <div className={"col-md-9 my-2"}>
           {/* <Room rooms={rooms} fromdate={fromdate} todate={todate} /> */}
           <Table dataSource={rooms} columns={columns(trangthai)} rowKey="id" />
         </div>
-      {/* )} */}
+      )}
     </div>
   );
 }
