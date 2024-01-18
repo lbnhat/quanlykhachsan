@@ -10,6 +10,7 @@ import {
   List,
   Avatar,
   InputNumber,
+  Spin,
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,15 +26,18 @@ import HomeLayout from "../core/layout/HomeLayout";
 import { booking, getDichVu } from "../slices/booking.slice";
 import styles from "../styles/pages/login.module.scss";
 import { formatMoney } from "../utils/helper";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const Booking = () => {
   const { id } = useParams();
   const { user } = useSelector((state) => state.auth.profile);
   const [dichVu, setDichVu] = useState([]);
+  const [error, setError] = useState("");
   const user_id = user.id;
   const { checkin_date, checkout_date, so_ngay } = JSON.parse(
     localStorage.getItem(LocalStorage.filters)
   );
+  const [loading, setLoading] = useState(false);
 
   const [data_chon, setDataChon] = useState(
     JSON.parse(localStorage.getItem(LocalStorage.checkout))
@@ -48,7 +52,10 @@ const Booking = () => {
         _checkout = [...checkout];
       }
       setTongGia(
-        _checkout.reduce((sum, room) => sum + Number(room.gia_phong)*so_ngay, 0)
+        _checkout.reduce(
+          (sum, room) => sum + Number(room.gia_phong) * so_ngay,
+          0
+        )
       );
     };
     _getRoom();
@@ -74,16 +81,20 @@ const Booking = () => {
       danh_sach_phong: data_chon,
       tong_tien: tong_gia,
       user_id,
-      danh_sach_dich_vu:dichVu,
+      danh_sach_dich_vu: dichVu,
       //room_id: Number(id),
     };
     try {
+      setLoading(true);
       const res = await dispatch(booking(_val));
       unwrapResult(res);
+      setLoading(false);
       history.push("/");
       toast.success("Bạn đã đặt vé thành công");
     } catch (error) {
       console.log(error);
+      setLoading(false);
+      setError(error.data.error);
     }
   };
   const onFinishFailed = (errorInfo) => {
@@ -95,22 +106,33 @@ const Booking = () => {
     const newData = [...data_chon];
     newData.splice(index, 1);
     setDataChon(newData);
-    setTongGia(newData.reduce((sum, room) => sum + Number(room.gia_phong)*so_ngay, 0));
+    setTongGia(
+      newData.reduce((sum, room) => sum + Number(room.gia_phong) * so_ngay, 0)
+    );
     localStorage.setItem(LocalStorage.checkout, JSON.stringify(newData));
   };
-  const handleInputChange = (id, inputName, value ) => {
+  const handleInputChange = (id, inputName, value) => {
     setDichVu((prevDichVu) =>
       prevDichVu.map((item) =>
         item.id_dich_vu === id ? { ...item, [inputName]: value } : item
       )
     );
-
   };
 
   const handleBlur = (id, inputName, value) => {
-    setTongGia(data_chon.reduce((sum, room) => sum + Number(room.gia_phong)*so_ngay, 0));
-    let gia_cuoi =data_chon.reduce((sum, room) => sum + Number(room.gia_phong)*so_ngay, 0)
-    gia_cuoi=gia_cuoi+dichVu.reduce((sum, room) => sum + Number(room.gia_dich_vu)*Number(room.so_luong), 0)
+    setTongGia(
+      data_chon.reduce((sum, room) => sum + Number(room.gia_phong) * so_ngay, 0)
+    );
+    let gia_cuoi = data_chon.reduce(
+      (sum, room) => sum + Number(room.gia_phong) * so_ngay,
+      0
+    );
+    gia_cuoi =
+      gia_cuoi +
+      dichVu.reduce(
+        (sum, room) => sum + Number(room.gia_dich_vu) * Number(room.so_luong),
+        0
+      );
     setTongGia(gia_cuoi);
   };
 
@@ -160,7 +182,12 @@ const Booking = () => {
                             Phòng : {item.so_phong} - Tầng: {item.so_tang}
                           </div>
                         }
-                        description={<b>{formatMoney(item.gia_phong*so_ngay)} vnđ/{so_ngay} ngày</b>}
+                        description={
+                          <b>
+                            {formatMoney(item.gia_phong * so_ngay)} vnđ/
+                            {so_ngay} ngày
+                          </b>
+                        }
                       />
                       <div>
                         <Button size="small" onClick={() => onDelete(index)}>
@@ -202,13 +229,24 @@ const Booking = () => {
                           <InputNumber
                             placeholder="Số lượng"
                             variant="borderless"
-                            value={item.so_luong || 0} 
-                            onChange={(value) => handleInputChange(item.id_dich_vu, 'so_luong', value)}
+                            value={item.so_luong || 0}
+                            onChange={(value) =>
+                              handleInputChange(
+                                item.id_dich_vu,
+                                "so_luong",
+                                value
+                              )
+                            }
                             style={{
                               width: 200,
                             }}
                             onBlur={(e) =>
-                              handleBlur(item.id_dich_vu, 'input1', e.target.value, item.gia_dich_vu)
+                              handleBlur(
+                                item.id_dich_vu,
+                                "input1",
+                                e.target.value,
+                                item.gia_dich_vu
+                              )
                             }
                           />
                         </div>
@@ -302,14 +340,33 @@ const Booking = () => {
                       </div>
                     </Form.Item>
                   ) : null}
+                  {loading ? (
+                    <div className="flex justify-center my-10">
+                      {/* <Spin
+                        indicator={
+                          <LoadingOutlined
+                            style={{
 
-                  <div className="flex justify-center my-10">
-                    <Form.Item>
-                      <Button type="primary" htmlType="submit">
-                        Xác nhận
+                              fontSize: 24,
+                            }}
+                            spin
+                          />
+                        }
+                      /> */}
+                      <Button type="primary" htmlType="submit" loading>
+                        Loading
                       </Button>
-                    </Form.Item>
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="flex justify-center my-10">
+                      <Form.Item         validateStatus="error"
+                  help={error || null}>
+                        <Button type="primary" htmlType="submit">
+                          Xác nhận
+                        </Button>
+                      </Form.Item>
+                    </div>
+                  )}
                 </Form>
               </div>
             </div>

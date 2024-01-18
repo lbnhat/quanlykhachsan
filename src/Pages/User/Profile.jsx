@@ -74,9 +74,9 @@ const Profile = () => {
               <Row gutter={[16, 16]}>
                 <Col sm={12}>
                   <Form.Item
-                    label="Họ"
-                    name="firstName"
-                    initialValue={user.firstName}
+                    label="Họ và Tên"
+                    name="name"
+                    initialValue={user.name}
                     rules={[
                       {
                         required: true,
@@ -87,7 +87,7 @@ const Profile = () => {
                     <Input />
                   </Form.Item>
                 </Col>
-                <Col sm={12}>
+                {/* <Col sm={12}>
                   <Form.Item
                     label="Tên"
                     name="lastName"
@@ -96,7 +96,7 @@ const Profile = () => {
                   >
                     <Input />
                   </Form.Item>
-                </Col>
+                </Col> */}
               </Row>
 
               <Row gutter={[16, 16]}>

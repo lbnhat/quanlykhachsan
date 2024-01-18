@@ -31,7 +31,7 @@ const DropDownList = ({ roleId }) => {
       {roleId === 2 ? (
         <>
           <Menu.Item key="2">
-            <Link to={`${path.dashboard}/overview`}>Dashboard</Link>
+            <Link to={`${path.admin}`}>Dashboard</Link>
           </Menu.Item>
         </>
       ) : null}
@@ -82,7 +82,7 @@ const Navbar = () => {
                   <Avatar src={profile.user?.image} icon={<UserOutlined />} />
                   <div className="flex flex-col px-4">
                     <Typography.Text className="text-lg inline-block nav-title">
-                      {profile.user.username || profile.user.lastName}
+                      {profile.user.username || profile.user.name}
                     </Typography.Text>
                     <Typography.Text className="text-sm inline-block">
                       {role[profile.user.roleId].name}

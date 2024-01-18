@@ -1,6 +1,6 @@
 export const role = Object.freeze({
   2: {
-    name: "Chủ khách sạn",
+    name: "Nhân viên",
   },
   1: {
     name: "Người dùng",

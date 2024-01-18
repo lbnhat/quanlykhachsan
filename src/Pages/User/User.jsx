@@ -13,7 +13,7 @@ const User = ({ children }) => {
   const location = useLocation();
   return (
     <HomeLayout>
-      <Content className="max-w-7xl min-h-screen mx-auto mt-5">
+      <Content className="max-w-8xl min-h-screen mx-auto mt-5">
         <Row gutter={[16, 16]}>
           <Col sm={4} className="bg-white py-5 min-h-screen">
             <Avatar
@@ -22,7 +22,7 @@ const User = ({ children }) => {
               size={{ xl: 80 }}
             />
             <Typography.Text className="inline-block ml-4 font-semibold">
-              {user.lastName}
+              {user.name}
             </Typography.Text>
             <Menu
               className="profile-menu mt-8"

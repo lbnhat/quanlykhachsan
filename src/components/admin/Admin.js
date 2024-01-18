@@ -43,26 +43,27 @@ function Adminscreen() {
           {/* <QuanLyHoaDon /> */}
           {activeTabKey === "2" && <QuanLyHoaDon />}
         </TabPane>
-        <TabPane tab="Quản lý nhân viên" key="3">
+        
+        <TabPane tab="Quản lý doanh thu" key="3">
+          <QuanLyDoanhThu />
+        </TabPane>
+        <TabPane tab="Quản lý nhân viên" key="4">
           <QuanLyNhanVien />
         </TabPane>
-        <TabPane tab="Quản lý khách hàng" key="4">
+        <TabPane tab="Quản lý khách hàng" key="5">
           <QuanLyKhachHang />
         </TabPane>
 
-        <TabPane tab="Quản lý phòng" key="5">
+        <TabPane tab="Quản lý phòng" key="6">
           <QuanLyPhong />
         </TabPane>
-        <TabPane tab="Quản lý dịch vụ" key="6">
+        <TabPane tab="Quản lý dịch vụ" key="7">
           <QuanLyDichVu />
         </TabPane>
         {/* <TabPane tab="Add Room" key="3">
             <Addroom />
           </TabPane> */}
 
-        <TabPane tab="Quản lý doanh thu" key="7">
-          <QuanLyDoanhThu />
-        </TabPane>
         <TabPane tab="Quản lý tài khoản" key="8">
           <QuanLyTaiKhoan />
         </TabPane>

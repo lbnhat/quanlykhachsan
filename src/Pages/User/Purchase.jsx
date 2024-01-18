@@ -54,12 +54,12 @@ const Purchase = () => {
               Ngày nhận/trả phòng
             </Typography.Text>
           </Col>
-          <Col sm={3}>
+          <Col sm={2}>
             <Typography.Text className="font-bold">
               Trạng thái
             </Typography.Text>
           </Col>
-          <Col sm={2}>
+          <Col sm={3}>
             <Typography.Text className="font-bold">Giá (VNĐ)</Typography.Text>
           </Col>
           <Col sm={2}>

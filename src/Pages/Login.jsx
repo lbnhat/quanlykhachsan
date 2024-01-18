@@ -16,13 +16,21 @@ const Login = ({ heading, role }) => {
     try {
       const res = await dispatch(login(values));
       unwrapResult(res);
-console.log(res.payload.data.roleId)
-      if (res.payload.data.roleId === 0) history.push("/admin");
-      else history.goBack();
+      console.log(res.payload.data.user.roleId);
+      // if (res.payload.data.roleId === 0) history.push("/admin");
+      // else history.goBack();
+      // <Link to={`${path.admin}`}>Dashboard</Link>
+      if (res.payload.data.user.roleId === 2) {
+        history.push("/admin");
+    } else {
+        history.goBack();
+    }
     } catch (error) {
-      if (error.status === 405) {
-        setError(error.data.message);
-      }
+      // if (error.status === 405) {
+      //   setError(error.data.message);
+      // }
+      console.log(error.data.error);
+      setError(error.data.error);
     }
   };
   const onFinishFailed = (errorInfo) => {
@@ -67,7 +75,7 @@ console.log(res.payload.data.roleId)
                 <div className="flex justify-center mt-6">
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
-                      Login
+                      Đăng nhập
                     </Button>
                   </Form.Item>
                 </div>

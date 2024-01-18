@@ -13,8 +13,8 @@ const Register = () => {
   const history = useHistory();
   const [error, setError] = useState("");
   const onFinish = async (values) => {
-    const { firstName, lastName, email, password } = values;
-    const data = { firstName, lastName, email, password };
+    const { name, email, password } = values;
+    const data = {  name, email, password };
     try {
       const res = await dispatch(register(data));
       unwrapResult(res);
@@ -61,15 +61,15 @@ const Register = () => {
             </Form.Item>
             <Form.Item>
               <div className={styles.formInputName}>
-                <Form.Item
+                {/* <Form.Item
                   label="Họ"
                   name="firstName"
                   rules={rules.name}
                   className="mr-4"
                 >
                   <Input />
-                </Form.Item>
-                <Form.Item label="Tên" name="lastName" rules={rules.name}>
+                </Form.Item> */}
+                <Form.Item label="Ho và Tên" name="name" rules={rules.name}>
                   <Input />
                 </Form.Item>
               </div>
