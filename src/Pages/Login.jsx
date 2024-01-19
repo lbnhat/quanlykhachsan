@@ -21,6 +21,7 @@ const Login = ({ heading, role }) => {
       // else history.goBack();
       // <Link to={`${path.admin}`}>Dashboard</Link>
       if (res.payload.data.user.roleId === 2||3)  {
+        localStorage.setItem( "admin",  true  );
         history.push("/admin");
     } else {
         history.goBack();

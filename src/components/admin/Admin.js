@@ -31,7 +31,7 @@ function Adminscreen() {
     const admin = localStorage.getItem("admin");
     console.log(admin);
     if (!admin) {
-      window.location.href = "/home";
+      window.location.href = "/";
       return;
     }
   }, [activeTabKey]);

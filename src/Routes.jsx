@@ -47,7 +47,7 @@ const Routes = () => {
       </Route>
       <Route path="/admin/login">
         <UnAuth>
-          <Login heading="Hello admin" role={2} />
+          <Login heading="Hello admin" role={2||3} />
         </UnAuth>
       </Route>
 
