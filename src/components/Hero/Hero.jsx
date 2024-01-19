@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import styles from "./styles.module.scss";
 import { toast } from "react-toastify";
 import LocalStorage from "../../constant/localStorage";
+import moment from 'moment';
 const { Option, OptGroup } = Select;
 
 const Hero = () => {
@@ -46,6 +47,11 @@ const Hero = () => {
     console.log("errorInfo")
     console.log(errorInfo)
     toast.error("Vui lòng nhập thông tin");
+  };
+
+  const disabledDate = current => {
+    // Ngăn chọn ngày quá khứ
+    return current && current < moment().startOf('day');
   };
   return (
     <>
@@ -95,7 +101,7 @@ const Hero = () => {
             name="date"
             label="Ngày đến/ Ngày đi"
           >
-            <DatePicker.RangePicker format="YYYY-MM-DD"  placeholder={["Chọn ngày", "Chọn ngày"]} />
+            <DatePicker.RangePicker   disabledDate={disabledDate} format="YYYY-MM-DD"  placeholder={["Chọn ngày", "Chọn ngày"]} />
           </Form.Item>
           <Form.Item
             className="mr-1"

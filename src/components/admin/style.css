@@ -1,0 +1,12 @@
+.custom-tabs .ant-tabs-nav {
+  display: flex;
+  flex-direction: row-reverse; /* Reverse the order of tabs */
+}
+
+.custom-tabs .ant-tabs-tab {
+  flex: 1; /* Allow tabs to take up equal width */
+}
+
+.custom-tabs .ant-tabs-tab + .ant-tabs-tab {
+  margin-left: 0; /* Remove the margin between tabs */
+}

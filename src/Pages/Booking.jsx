@@ -228,6 +228,7 @@ const Booking = () => {
                         <div>
                           <InputNumber
                             placeholder="Số lượng"
+                            min={0}
                             variant="borderless"
                             value={item.so_luong || 0}
                             onChange={(value) =>

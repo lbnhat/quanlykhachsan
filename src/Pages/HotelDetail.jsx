@@ -48,7 +48,6 @@ const HotelDetail = () => {
         };
       });
       setRoomFiltered(combinedData);
-      console.log(combinedData);
       setDataChon(_checkout);
       setTongGia(
         _checkout.reduce((sum, room) => sum + Number(room.gia_phong)*soNgay, 0)
@@ -57,7 +56,6 @@ const HotelDetail = () => {
     _getRoom();
   }, []);
   const actionChon = (value) => {
-    console.log(value);
     // Implement your logic to delete the item at the specified index
     const combinedData = roomFiltered.map((item) => {
       const foundItem = value.find((room) => room.id_phong === item.id_phong);
@@ -110,12 +108,9 @@ const HotelDetail = () => {
         };
       });
       setRoomFiltered(combinedData);
-      console.log("combinedData");
-      console.log(combinedData);
     };
     _getRoom();
   };
-  console.log(tong_gia);
   return (
     <HomeLayout>
       <Content className="max-w-6xl h-screen mx-auto mt-5">

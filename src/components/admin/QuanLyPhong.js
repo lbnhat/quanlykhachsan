@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Tabs, Space, Table, Button, Modal } from "antd";
+import { formatDate, formatMoney } from "../../utils/helper";
 const { TabPane } = Tabs;
 
 export default function QuanLyPhong() {
@@ -69,14 +70,14 @@ export default function QuanLyPhong() {
         key: "hang_phong",
       },
       {
-        title: "Trạng Thái",
-        dataIndex: "trang_thai",
-        key: "trang_thai",
-      },
-      {
         title: "Giá Phòng",
         dataIndex: "gia_phong",
         key: "gia_phong",
+        render: (gia_phong) => (
+          <div>
+            <p> {formatMoney(gia_phong)}vnđ</p>
+          </div>
+        ),
       },
       {
         title: "",

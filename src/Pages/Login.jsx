@@ -20,7 +20,7 @@ const Login = ({ heading, role }) => {
       // if (res.payload.data.roleId === 0) history.push("/admin");
       // else history.goBack();
       // <Link to={`${path.admin}`}>Dashboard</Link>
-      if (res.payload.data.user.roleId === 2) {
+      if (res.payload.data.user.roleId === 2||3)  {
         history.push("/admin");
     } else {
         history.goBack();

@@ -5,6 +5,7 @@ import { typeOfRoom } from "../../constant/common";
 import { formatMoney } from "../../utils/helper";
 import LocalStorage from "../../constant/localStorage";
 const RoomCardItem = ({ room, actionChon }) => {
+  console.log(room);
   const onOk = (value) => {
     const checkout = JSON.parse(localStorage.getItem(LocalStorage.checkout));
     let _checkout = [];
@@ -37,25 +38,41 @@ const RoomCardItem = ({ room, actionChon }) => {
             <Typography.Text className="block py-2 ">
               Loại phòng: {room.loai_phong}
             </Typography.Text>
-            <Typography.Text className="pb-4">
-              {room.mo_ta}
-            </Typography.Text>
+            <Typography.Text className="pb-4">{room.mo_ta}</Typography.Text>
           </div>
           <div className="flex justify-end">
             <div className="flex-col items-center ">
               <span className="block text-right line-through">
-                {formatMoney(room.gia_phong*110/100)} vnđ
+                {formatMoney((room.gia_phong * 110) / 100)} vnđ
               </span>
               <span className="block text-right font-bold text-2xl py-1 text-red-400">
                 {formatMoney(room.gia_phong)} vnđ
               </span>
-              {room.trang_thai?(
-                <Button type="primary"
-                style={{
-                  background: "#4CAF50",
-                  borderColor: "#4CAF50",
-                  color: "white",
-                }} onClick={() => onOk(room)} disabled>
+
+              {room.trang_thai_dat_phong === "Đã đặt" ? (
+                <Button
+                  type="primary"
+                  style={{
+                    background: "#949499",
+                    borderColor: "#4CAF50",
+                    color: "white",
+                  }}
+                  onClick={() => onOk(room)}
+                  disabled
+                >
+                  Đã được thuê (Tạm hết)
+                </Button>
+              ) : room.trang_thai ? (
+                <Button
+                  type="primary"
+                  style={{
+                    background: "#4CAF50",
+                    borderColor: "#4CAF50",
+                    color: "white",
+                  }}
+                  onClick={() => onOk(room)}
+                  disabled
+                >
                   Đang chọn
                 </Button>
               ) : (
@@ -63,6 +80,7 @@ const RoomCardItem = ({ room, actionChon }) => {
                   Chọn phòng
                 </Button>
               )}
+
               {/* <Link to={`/booking/${room.id}`} className="text-right block">
                 <Button type="primary">Chọn phòng</Button>
               </Link> */}

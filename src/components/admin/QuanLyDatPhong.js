@@ -231,7 +231,7 @@ export default function QuanLyDatPhong({ activeTabKey }) {
       key: "thong_tin_khach_hang",
       render: (thong_tin_khach_hang) => (
         <div>
-          <p>Tên:{thong_tin_khach_hang.ten_khach_hang}</p>
+          <p>Tên: {thong_tin_khach_hang.ten_khach_hang}</p>
           <p>Điện thoại: {thong_tin_khach_hang.sdt}</p>
         </div>
       ),

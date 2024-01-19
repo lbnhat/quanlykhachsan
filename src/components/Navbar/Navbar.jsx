@@ -28,7 +28,7 @@ const DropDownList = ({ roleId }) => {
       <Menu.Item key="0">
         <Link to={path.user}>Trang cá nhân</Link>
       </Menu.Item>
-      {roleId === 2 ? (
+      {roleId === 2||3 ? (
         <>
           <Menu.Item key="2">
             <Link to={`${path.admin}`}>Dashboard</Link>

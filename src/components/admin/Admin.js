@@ -1,6 +1,9 @@
+// 
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Tabs } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 import QuanLyNhanVien from "./QuanLyNhanVien";
 import QuanLyKhachHang from "./QuanLyKhachHang";
 import QuanLyPhong from "./QuanLyPhong";
@@ -9,13 +12,18 @@ import QuanLyDatPhong from "./QuanLyDatPhong";
 import QuanLyHoaDon from "./QuanLyHoaDon";
 import QuanLyDoanhThu from "./QuanLyDoanhThu";
 import QuanLyTaiKhoan from "./QuanLyTaiKhoan";
+import 'antd/dist/antd.css'; 
 const { TabPane } = Tabs;
+
 function Adminscreen() {
+  const profile = useSelector((state) => state.auth.profile);
+  const roleId = profile?.user?.roleId;
   const [activeTabKey, setActiveTabKey] = useState("1");
 
   const handleTabChange = (key) => {
     setActiveTabKey(key);
   };
+
   useEffect(() => {
     console.log(
       `Tab ${activeTabKey} is active. Call API or perform necessary tasks.`
@@ -28,45 +36,42 @@ function Adminscreen() {
     }
   }, [activeTabKey]);
 
+  const customTabsStyle = {
+    display: 'flex',
+    justifyContent: 'normal', // You can replace 'normal' with other valid values
+  };
+
+  const commonTabs = [
+    { key: "1", title: "Quản lý đặt phòng", component: <QuanLyDatPhong /> },
+    { key: "2", title: "Quản lý hóa đơn", component: <QuanLyHoaDon /> },
+    { key: "3", title: "Quản lý doanh thu", component: <QuanLyDoanhThu /> },
+    { key: "4", title: "Quản lý nhân viên", component: <QuanLyNhanVien /> },
+    { key: "5", title: "Quản lý khách hàng", component: <QuanLyKhachHang /> },
+    { key: "6", title: "Quản lý phòng", component: <QuanLyPhong /> },
+    { key: "7", title: "Quản lý dịch vụ", component: <QuanLyDichVu /> },
+    { key: "8", title: "Quản lý tài khoản", component: <QuanLyTaiKhoan /> },
+  ];
+
+  const tabsToRender = roleId === 3 ? commonTabs : commonTabs.slice(0, 2);
+
+  const renderTabs = () => {
+    return tabsToRender.map((tab) => (
+      <TabPane tab={tab.title} key={tab.key} forceRender={true}>
+        {activeTabKey === tab.key && tab.component}
+      </TabPane>
+    ));
+  };
+
   return (
     <div className="ml-3 mr-3 mt-3 bs">
       <h1 className="text-3xl text-center">Quản lý khách sạn</h1>
       <Tabs
+        className="custom-tabs"
         defaultActiveKey="1"
         activeKey={activeTabKey}
         onChange={handleTabChange}
       >
-        <TabPane tab="Quản lý đặt phòng" key="1" forceRender={true}>
-          {activeTabKey === "1" && <QuanLyDatPhong />}
-        </TabPane>
-        <TabPane tab="Quản lý hóa đơn" key="2" forceRender={true}>
-          {/* <QuanLyHoaDon /> */}
-          {activeTabKey === "2" && <QuanLyHoaDon />}
-        </TabPane>
-        
-        <TabPane tab="Quản lý doanh thu" key="3">
-          <QuanLyDoanhThu />
-        </TabPane>
-        <TabPane tab="Quản lý nhân viên" key="4">
-          <QuanLyNhanVien />
-        </TabPane>
-        <TabPane tab="Quản lý khách hàng" key="5">
-          <QuanLyKhachHang />
-        </TabPane>
-
-        <TabPane tab="Quản lý phòng" key="6">
-          <QuanLyPhong />
-        </TabPane>
-        <TabPane tab="Quản lý dịch vụ" key="7">
-          <QuanLyDichVu />
-        </TabPane>
-        {/* <TabPane tab="Add Room" key="3">
-            <Addroom />
-          </TabPane> */}
-
-        <TabPane tab="Quản lý tài khoản" key="8">
-          <QuanLyTaiKhoan />
-        </TabPane>
+        {renderTabs()}
       </Tabs>
     </div>
   );
