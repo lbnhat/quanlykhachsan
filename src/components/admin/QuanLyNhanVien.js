@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Tabs, Space, Table, Button, Modal, Card, Col, Row } from "antd";
+import { Tabs, Space, Table, Button, Modal, Card, Col, Row , Form, Input, Switch } from "antd";
 const { TabPane } = Tabs;
 export default function QuanLyNhanVien() {
   const [users, setusers] = useState([]);
@@ -14,11 +14,8 @@ export default function QuanLyNhanVien() {
 
   useEffect(async () => {
     try {
-
       const data = await (
-        await axios.get(
-          "http://localhost:8888/api/nhan-vien"
-        )
+        await axios.get("http://localhost:8888/api/nhan-vien")
       ).data.data;
       // const admin = localStorage.getItem('admin');
       // if (admin) {
@@ -79,7 +76,6 @@ export default function QuanLyNhanVien() {
     }
   }, []);
 
-
   const showModal = (nhanVien, action) => {
     if (action === "xem_chi_tiet") {
       setTitleModal("Xem chi tiết");
@@ -92,8 +88,8 @@ export default function QuanLyNhanVien() {
       setNhanVien({
         id_nhan_vien: "",
         ten_nhan_vien: "",
-        gioi_tinh:"",
-        so_cmnd:"",
+        gioi_tinh: "",
+        so_cmnd: "",
         sdt: "",
         chuc_vu: "",
         dia_chi: "",
@@ -107,8 +103,8 @@ export default function QuanLyNhanVien() {
     setNhanVien({
       id_nhan_vien: "",
       ten_nhan_vien: "",
-      gioi_tinh:"",
-      so_cmnd:"",
+      gioi_tinh: "",
+      so_cmnd: "",
       sdt: "",
       chuc_vu: "",
       dia_chi: "",
@@ -120,8 +116,8 @@ export default function QuanLyNhanVien() {
     setNhanVien({
       id_nhan_vien: "",
       ten_nhan_vien: "",
-      gioi_tinh:"",
-      so_cmnd:"",
+      gioi_tinh: "",
+      so_cmnd: "",
       sdt: "",
       chuc_vu: "",
       dia_chi: "",
@@ -229,10 +225,16 @@ export default function QuanLyNhanVien() {
   );
 }
 export function NhanVien(nhanVienTuBang) {
-  const [id_nhan_vien, setMaNhanVien] = useState(nhanVienTuBang.nhanVien.id_nhan_vien);
-  const [ten_nhan_vien, setTenNhanVien] = useState( nhanVienTuBang.nhanVien.ten_nhan_vien );
-  const [gioi_tinh, setGioiTinh] = useState( nhanVienTuBang.nhanVien.gioi_tinh );
-  const [so_cmnd, setSoChungMinhNhanDan] = useState( nhanVienTuBang.nhanVien.so_cmnd );
+  const [id_nhan_vien, setMaNhanVien] = useState(
+    nhanVienTuBang.nhanVien.id_nhan_vien
+  );
+  const [ten_nhan_vien, setTenNhanVien] = useState(
+    nhanVienTuBang.nhanVien.ten_nhan_vien
+  );
+  const [gioi_tinh, setGioiTinh] = useState(nhanVienTuBang.nhanVien.gioi_tinh);
+  const [so_cmnd, setSoChungMinhNhanDan] = useState(
+    nhanVienTuBang.nhanVien.so_cmnd
+  );
   const [sdt, setSoDienThoai] = useState(nhanVienTuBang.nhanVien.sdt);
   const [chuc_vu, setChucVu] = useState(nhanVienTuBang.nhanVien.chuc_vu);
   const [dia_chi, setDiaChi] = useState(nhanVienTuBang.nhanVien.dia_chi);
@@ -254,7 +256,7 @@ export function NhanVien(nhanVienTuBang) {
       }
     } catch (error) {}
   }, [nhanVienTuBang]);
- 
+
   async function ThemNhanVien() {
     let newNhanVien = {
       ten_nhan_vien,
@@ -302,86 +304,166 @@ export function NhanVien(nhanVienTuBang) {
   }
 
   return (
-    <div className="row">
-      <label htmlFor="ten_nhan_vien" style={{ fontWeight: "bold" }}>
-        Tên nhân viên:
-      </label>
-      <input
-        value={ten_nhan_vien}
-        onChange={(e) => {
-          setTenNhanVien(e.target.value);
-        }}
-        type="text"
-        disabled={disabledInput}
-        className="form-control my-1"
-        placeholder="Nhập tên nhân viên"
-        
-      />
-      <label htmlFor="gioi_tinh" style={{ fontWeight: "bold" }}>
-        Giới tính:
-      </label>
-        <input
-          value={gioi_tinh}
-          onChange={(e) => {
-            setGioiTinh(e.target.value);
-          }}
-          disabled={disabledInput}
-          type="text"
-          className="form-control my-1"
-          placeholder="Giới tính"
-        />
-         <label htmlFor="sdt" style={{ fontWeight: "bold" }}>
-        Số CMND:
-      </label>
-        <input
-          value={so_cmnd}
-          onChange={(e) => {
-            setSoChungMinhNhanDan(e.target.value);
-          }}
-          disabled={disabledInput}
-          type="text"
-          className="form-control my-1"
-          placeholder="Số CMND"
-        />
-      <label htmlFor="sdt" style={{ fontWeight: "bold" }}>
-        Số điện thoại:
-      </label>
-      <input
-        value={sdt}
-        onChange={(e) => {
-          setSoDienThoai(e.target.value);
-        }}
-        disabled={disabledInput}
-        type="text"
-        className="form-control my-1"
-        placeholder="Nhập số điện thoại"
-      />
-      <label htmlFor="chuc_vu" style={{ fontWeight: "bold" }}>
-        Chức vụ:
-      </label>
-      <input
-        value={chuc_vu}
-        onChange={(e) => {
-          setChucVu(e.target.value);
-        }}
-        disabled={disabledInput}
-        type="text"
-        className="form-control my-1"
-        placeholder="Nhập chức vụ"
-      />
-      <label htmlFor="dia_chi" style={{ fontWeight: "bold" }}>
-        Địa chỉ:
-      </label>
-      <input
-        value={dia_chi}
-        onChange={(e) => {
-          setDiaChi(e.target.value);
-        }}
-        disabled={disabledInput}
-        type="text"
-        className="form-control my-1"
-        placeholder="Nhập địa chỉ"
-      />
-    </div>
+    <Form layout="vertical">
+      <Row gutter={16}>
+        <Col span={8}>
+          <Form.Item label="Tên nhân viên">
+            <Input
+              value={ten_nhan_vien}
+              onChange={(e) => setTenNhanVien(e.target.value)}
+              disabled={disabledInput}
+              placeholder="Nhập tên nhân viên"
+            />
+          </Form.Item>
+        </Col>
+
+        <Col span={8}>
+          <Form.Item label="Giới tính">
+            <Input
+              value={gioi_tinh}
+              onChange={(e) => setGioiTinh(e.target.value)}
+              disabled={disabledInput}
+              placeholder="Giới tính"
+            />
+          </Form.Item>
+        </Col>
+
+        <Col span={8}>
+          <Form.Item label="Số CMND">
+            <Input
+              value={so_cmnd}
+              onChange={(e) => setSoChungMinhNhanDan(e.target.value)}
+              disabled={disabledInput}
+              placeholder="Số CMND"
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={16}>
+        <Col span={8}>
+          <Form.Item label="Số điện thoại">
+            <Input
+              value={sdt}
+              onChange={(e) => setSoDienThoai(e.target.value)}
+              disabled={disabledInput}
+              placeholder="Nhập số điện thoại"
+            />
+          </Form.Item>
+        </Col>
+
+        <Col span={8}>
+          <Form.Item label="Chức vụ">
+            <Input
+              value={chuc_vu}
+              onChange={(e) => setChucVu(e.target.value)}
+              disabled={disabledInput}
+              placeholder="Nhập chức vụ"
+            />
+          </Form.Item>
+        </Col>
+
+        <Col span={8}>
+          <Form.Item label="Địa chỉ">
+            <Input
+              value={dia_chi}
+              onChange={(e) => setDiaChi(e.target.value)}
+              disabled={disabledInput}
+              placeholder="Nhập địa chỉ"
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      {/* Switch để bật/tắt disabledInput */}
+      {/* <Row>
+        <Col span={24}>
+          <Form.Item label="Bật/Tắt chỉ đọc">
+            <Switch checked={disabledInput} onChange={(checked) => setDisabledInput(checked)} />
+          </Form.Item>
+        </Col>
+      </Row> */}
+    </Form>
   );
+  //   <div className="row">
+  //     <label htmlFor="ten_nhan_vien" style={{ fontWeight: "bold" }}>
+  //       Tên nhân viên:
+  //     </label>
+  //     <input
+  //       value={ten_nhan_vien}
+  //       onChange={(e) => {
+  //         setTenNhanVien(e.target.value);
+  //       }}
+  //       type="text"
+  //       disabled={disabledInput}
+  //       className="form-control my-1"
+  //       placeholder="Nhập tên nhân viên"
+  //     />
+  //     <label htmlFor="gioi_tinh" style={{ fontWeight: "bold" }}>
+  //       Giới tính:
+  //     </label>
+  //     <input
+  //       value={gioi_tinh}
+  //       onChange={(e) => {
+  //         setGioiTinh(e.target.value);
+  //       }}
+  //       disabled={disabledInput}
+  //       type="text"
+  //       className="form-control my-1"
+  //       placeholder="Giới tính"
+  //     />
+  //     <label htmlFor="sdt" style={{ fontWeight: "bold" }}>
+  //       Số CMND:
+  //     </label>
+  //     <input
+  //       value={so_cmnd}
+  //       onChange={(e) => {
+  //         setSoChungMinhNhanDan(e.target.value);
+  //       }}
+  //       disabled={disabledInput}
+  //       type="text"
+  //       className="form-control my-1"
+  //       placeholder="Số CMND"
+  //     />
+  //     <label htmlFor="sdt" style={{ fontWeight: "bold" }}>
+  //       Số điện thoại:
+  //     </label>
+  //     <input
+  //       value={sdt}
+  //       onChange={(e) => {
+  //         setSoDienThoai(e.target.value);
+  //       }}
+  //       disabled={disabledInput}
+  //       type="text"
+  //       className="form-control my-1"
+  //       placeholder="Nhập số điện thoại"
+  //     />
+  //     <label htmlFor="chuc_vu" style={{ fontWeight: "bold" }}>
+  //       Chức vụ:
+  //     </label>
+  //     <input
+  //       value={chuc_vu}
+  //       onChange={(e) => {
+  //         setChucVu(e.target.value);
+  //       }}
+  //       disabled={disabledInput}
+  //       type="text"
+  //       className="form-control my-1"
+  //       placeholder="Nhập chức vụ"
+  //     />
+  //     <label htmlFor="dia_chi" style={{ fontWeight: "bold" }}>
+  //       Địa chỉ:
+  //     </label>
+  //     <input
+  //       value={dia_chi}
+  //       onChange={(e) => {
+  //         setDiaChi(e.target.value);
+  //       }}
+  //       disabled={disabledInput}
+  //       type="text"
+  //       className="form-control my-1"
+  //       placeholder="Nhập địa chỉ"
+  //     />
+  //   </div>
+  // );
 }
