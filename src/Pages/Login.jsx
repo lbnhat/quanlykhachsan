@@ -20,12 +20,13 @@ const Login = ({ heading, role }) => {
       // if (res.payload.data.roleId === 0) history.push("/admin");
       // else history.goBack();
       // <Link to={`${path.admin}`}>Dashboard</Link>
-      if (res.payload.data.user.roleId === 2||3)  {
-        localStorage.setItem( "admin",  true  );
+      if (res.payload.data.user.roleId === 1) {
+        // history.goBack();
+      } else {
+        console.log("aa " + res.payload.data.user.roleId);
+        localStorage.setItem("admin", true);
         history.push("/admin");
-    } else {
-        history.goBack();
-    }
+      }
     } catch (error) {
       // if (error.status === 405) {
       //   setError(error.data.message);
