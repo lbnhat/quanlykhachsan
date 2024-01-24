@@ -12,12 +12,15 @@ const Register = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const onFinish = async (values) => {
-    const { name, email, password } = values;
-    const data = {  name, email, password };
+    const { name, email, password, phone_number } = values;
+    const data = { name, email, password, phone_number };
     try {
+      setLoading(true);
       const res = await dispatch(register(data));
       unwrapResult(res);
+      setLoading(false);
       toast.success(
         "Bạn đã đăng kí thành công! Vui lòng đăng nhập để tiếp tục",
         {
@@ -28,9 +31,7 @@ const Register = () => {
       history.push("/");
     } catch (error) {
       console.log(error);
-      if (error.status === 405) {
-        setError(error.data.message);
-      }
+      setError(error.data.error);
     }
   };
 
@@ -61,22 +62,31 @@ const Register = () => {
             </Form.Item>
             <Form.Item>
               <div className={styles.formInputName}>
-                {/* <Form.Item
-                  label="Họ"
-                  name="firstName"
-                  rules={rules.name}
+                <Form.Item
                   className="mr-4"
+                  label="Họ và Tên"
+                  name="name"
+                  rules={rules.name}
                 >
                   <Input />
-                </Form.Item> */}
-                <Form.Item label="Ho và Tên" name="name" rules={rules.name}>
+                </Form.Item>
+                <Form.Item
+                  label="Số điện thoại"
+                  name="phone_number"
+                  rules={rules.phone_number}
+                >
                   <Input />
                 </Form.Item>
               </div>
             </Form.Item>
 
-            <Form.Item label="Email" name="email" rules={rules.email} validateStatus="error"
-                  help={error || null}>
+            <Form.Item
+              label="Email đăng nhập"
+              name="email"
+              rules={rules.email}
+              validateStatus="error"
+              help={error || null}
+            >
               <Input />
             </Form.Item>
             <Form.Item label="Mật khẩu" name="password" rules={rules.password}>
@@ -104,14 +114,35 @@ const Register = () => {
             >
               <Input.Password />
             </Form.Item>
+            {loading ? (
+              <div className="flex justify-center my-10">
+                {/* <Spin
+                        indicator={
+                          <LoadingOutlined
+                            style={{
 
-            <Form.Item>
-              <div className="flex justify-center">
-                <Button type="primary" htmlType="submit">
-                  Đăng kí
+                              fontSize: 24,
+                            }}
+                            spin
+                          />
+                        }
+                      /> */}
+                <Button type="primary" htmlType="submit" loading>
+                  Loading
                 </Button>
               </div>
-            </Form.Item>
+            ) : (
+              <div className="flex justify-center my-10">
+                <Form.Item>
+                  <div className="flex justify-center">
+                    <Button type="primary" htmlType="submit">
+                      Đăng kí
+                    </Button>
+                  </div>
+                </Form.Item>
+              </div>
+            )}
+
             <div>
               <span>Bạn đã có tài khoản?</span>
               <Link to="/login">Đăng nhập</Link>

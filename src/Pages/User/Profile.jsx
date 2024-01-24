@@ -11,6 +11,7 @@ import {
   Radio,
   Row,
   Typography,
+  message
 } from "antd";
 import moment from "moment";
 import { useState } from "react";
@@ -23,9 +24,10 @@ import User from "./User";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth.profile);
-
+  const [loading, setLoading] = useState(false);
   const [banner, setBanner] = useState("");
   const [progress, setProgress] = useState(0);
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   const onFinish = async (values) => {
@@ -36,11 +38,15 @@ const Profile = () => {
       image: banner.url || user.image,
       id: user.id,
     };
+    setLoading(true);
     const res = await dispatch(updateMe(_data));
     unwrapResult(res);
+    message.success("Cập nhật thành công");
+    setLoading(false);
     try {
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      setError(error.data.error)
     }
   };
   const onFinishFailed = (errorInfo) => {
@@ -69,7 +75,7 @@ const Profile = () => {
                 initialValue={user?.ten_dang_nhap}
                 rules={rules.ten_dang_nhap}
               >
-                <Input />
+                <Input disabled />
               </Form.Item>
               <Row gutter={[16, 16]}>
                 <Col sm={12}>
@@ -110,9 +116,9 @@ const Profile = () => {
                         message: "Trường này không được bỏ trống",
                       },
                     ]}
-                    name="phoneNumber"
+                    name="phone_number"
                   >
-                    <InputNumber />
+                    <Input />
                   </Form.Item>
                 </Col>
                 <Col sm={12}>
@@ -121,6 +127,11 @@ const Profile = () => {
                       <Form.Item
                         label="Ngày sinh"
                         name="ngay_sinh"
+                        initialValue={
+                          user.ngay_sinh &&
+                          moment(formatDate(user.ngay_sinh, "YYYY-MM-DD"))
+                        }
+                        format="YYYY-MM-DD"
                         rules={[
                           {
                             required: true,
@@ -131,15 +142,14 @@ const Profile = () => {
                         <DatePicker
                           defaultValue={
                             user.ngay_sinh &&
-                            moment(formatDate(user.ngay_sinh, "YYYY-MM-DD"))
+                            moment(formatDate(user?.ngay_sinh, "YYYY-MM-DD"))
                           }
-                          format="YYYY-MM-DD"
                         />
                       </Form.Item>
                     </Col>
                     <Col sm={12}>
                       <div className="flex items-center h-full justify-center">
-                        <Form.Item
+                        {/* <Form.Item
                           label="Giới tính"
                           name="gender"
                           initialValue={user?.gender}
@@ -148,7 +158,7 @@ const Profile = () => {
                             <Radio value={true}>Nam</Radio>
                             <Radio value={false}>Nữ</Radio>
                           </Radio.Group>
-                        </Form.Item>
+                        </Form.Item> */}
                       </div>
                     </Col>
                   </Row>
@@ -172,13 +182,32 @@ const Profile = () => {
             </Col>
           </Row>
 
-          <div className="flex justify-center my-10">
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Cập nhập thông tin
+          {loading ? (
+            <div className="flex justify-center my-10">
+              {/* <Spin
+                        indicator={
+                          <LoadingOutlined
+                            style={{
+
+                              fontSize: 24,
+                            }}
+                            spin
+                          />
+                        }
+                      /> */}
+              <Button type="primary" htmlType="submit" loading>
+                Loading
               </Button>
-            </Form.Item>
-          </div>
+            </div>
+          ) : (
+            <div className="flex justify-center my-10">
+              <Form.Item validateStatus="error" help={error || null}>
+                <Button type="primary" htmlType="submit">
+                  Cập nhập thông tin
+                </Button>
+              </Form.Item>
+            </div>
+          )}
         </Form>
       </div>
     </User>

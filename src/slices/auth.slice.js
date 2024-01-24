@@ -73,11 +73,14 @@ const auth = createSlice({
       );
     },
     [updateMe.fulfilled]: (state, action) => {
-      state.profile.user = action.payload.data;
-      localStorage.setItem(
-        LocalStorage.user,
-        JSON.stringify(state.profile.user)
-      );
+     // state.profile.user = action.payload.data;
+      const _data = action.payload.data;
+      state.profile = _data;
+      localStorage.setItem(LocalStorage.user, JSON.stringify(_data.user));
+      // localStorage.setItem(
+      //   LocalStorage.user,
+      //   JSON.stringify(state.profile.user)
+      // );
     },
   },
 });

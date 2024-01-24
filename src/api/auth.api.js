@@ -11,7 +11,7 @@ const authApi = {
     return http.post("user/manager", data);
   },
   updateProfile(data) {
-    return http.put("user", data);
+    return http.put("api/khach-hang", data);
   },
   changePass(data) {
     return http.put("user/pass", data);

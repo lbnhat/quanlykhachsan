@@ -360,8 +360,7 @@ const Booking = () => {
                     </div>
                   ) : (
                     <div className="flex justify-center my-10">
-                      <Form.Item         validateStatus="error"
-                  help={error || null}>
+                      <Form.Item validateStatus="error" help={error || null}>
                         <Button type="primary" htmlType="submit">
                           Xác nhận
                         </Button>

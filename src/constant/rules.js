@@ -25,6 +25,12 @@ export const rules = {
     {
       required: true,
       message: "Trường này không được bỏ trống",
+    }
+  ],
+  sdt: [
+    {
+      required: true,
+      message: "Trường này không được bỏ trống",
     },
     {
       max: 12,
