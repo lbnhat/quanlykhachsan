@@ -13,7 +13,9 @@ const HomePage = () => {
           style={{ padding: 24, minHeight: 380 }}
         >
           <Hero />
+       
         </div>
+     
         {/* <HotelSlider /> */}
         {/* <h1 className="mt-8 mb-2 text-4xl font-medium">
           Các khách sạn phổ biến
@@ -33,8 +35,12 @@ const HomePage = () => {
           </Col>
         </Row> */}
       </div>
+
     </HomeLayout>
   );
 };
 
 export default HomePage;
+
+
+
