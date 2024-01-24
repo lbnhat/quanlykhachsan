@@ -1,4 +1,4 @@
-// 
+//
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -12,7 +12,8 @@ import QuanLyDatPhong from "./QuanLyDatPhong";
 import QuanLyHoaDon from "./QuanLyHoaDon";
 import QuanLyDoanhThu from "./QuanLyDoanhThu";
 import QuanLyTaiKhoan from "./QuanLyTaiKhoan";
-import 'antd/dist/antd.css'; 
+import HomeLayout from "../../core/layout/HomeLayout";
+import "antd/dist/antd.css";
 const { TabPane } = Tabs;
 
 function Adminscreen() {
@@ -37,8 +38,8 @@ function Adminscreen() {
   }, [activeTabKey]);
 
   const customTabsStyle = {
-    display: 'flex',
-    justifyContent: 'normal', // You can replace 'normal' with other valid values
+    display: "flex",
+    justifyContent: "normal", // You can replace 'normal' with other valid values
   };
 
   const commonTabs = [
@@ -63,17 +64,19 @@ function Adminscreen() {
   };
 
   return (
-    <div className="ml-3 mr-3 mt-3 bs">
-      <h1 className="text-3xl text-center">Quản lý khách sạn</h1>
-      <Tabs
-        className="custom-tabs"
-        defaultActiveKey="1"
-        activeKey={activeTabKey}
-        onChange={handleTabChange}
-      >
-        {renderTabs()}
-      </Tabs>
-    </div>
+    <HomeLayout>
+      <div className="ml-3 mr-3 mt-3 bs">
+        <h1 className="text-3xl text-center">Quản lý khách sạn</h1>
+        <Tabs
+          className="custom-tabs"
+          defaultActiveKey="1"
+          activeKey={activeTabKey}
+          onChange={handleTabChange}
+        >
+          {renderTabs()}
+        </Tabs>
+      </div>
+    </HomeLayout>
   );
 }
 
